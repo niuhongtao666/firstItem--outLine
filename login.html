@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/login.css?v=22">
+    <script src="angular/angular.min.js"></script>
+</head>
+<body>
+    <div class="smalllogo"></div>
+    <div class="content">
+        <div class="sign-in">Sign in</div>
+        <div class="identity"><input type="text" placeholder="手机号" ng-model="telephone"></div>
+        <div class="password"><input type="password" placeholder="密码" ng-model="password"></div>
+        <div class="messagee">
+            <div class="message" ng-repeat="item in mess" ng-show="tan">{{item.code}}</div>
+        </div>
+        <div class="login" ng-click="login()">登录</div>
+        <div class="forgetPassword" ng-click="forgetPassword()">忘记密码</div>
+    </div>
+</body>
+</html>

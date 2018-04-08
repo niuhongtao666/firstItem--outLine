@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员工</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/payingStaff.css?v=24">
+    <link rel="stylesheet" href="css/angular.css?v=22">
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">
+    <script src="js/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="lib/html5shiv/html5shiv.min.js"></script>
+    <script src="lib/respond/respond.min.js"></script>
+    <![endif]-->
+    <script src="angular/angular.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-datetimepicker.js"></script>
+    <script src="js/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script src="js/payingStaff.js?v=226"></script>
+</head>
+<body>
+    <!--左侧部分开始-->
+    <div class="left">
+        <!--<div class="smallLogo"><img src="img/web-logo.png" alt=""></div>-->
+        <!--<div class="name">公司名称：{{businessNam}}</div>-->
+        <!--<div class="code">公司代码：{{businessCode}}</div>-->
+        <!--<div class="addStaff">添加员工</div>-->
+        <!--<div class="out" ng-click="deleteToken()">登出</div>-->
+        <div class="smallLogo"><img src="img/web-logo.png" alt=""></div>
+        <div class="lineFirst"></div>
+        <div class="smallLogoSec"><img src="img/businessName.png" alt=""></div>
+        <div class="name"><p class="pOne">公司名称</p>{{payingBusinessName}}</div>
+        <div class="smallLogoThr"><img src="img/businessCode.png" alt=""></div>
+        <div class="code"><p class="pTwo">公司代码</p>{{payingBusinessCode}}</div>
+        <div class="addStaff">
+            <div class="xDirection"></div>
+            <div class="yDirection"></div>
+            添加员工
+        </div>
+        <div class="out" ng-click="deleteTokenPaying()">登出</div>
+    </div>
+    <!--左侧部分结束-->
+    <!--右侧部分开始-->
+    <div class="right">
+        <div class="head">
+            <div class="search">
+                <div class="lf" ng-click="searchPayingStaff()">
+                    <img src="img/sear.png" alt="">
+                    <span>搜索</span>
+                </div>
+                <div class="rt">
+                    <input type="text" placeholder="输入员工账号" ng-model="staffPaying">
+                </div>
+            </div>
+            <span class="status"></span>
+            <span class="identity">管理员</span>
+            <span class="headPic">
+                <img src="img/headPic.jpg" alt="">
+            </span>
+        </div>
+        <div class="main">
+            <div class="content">
+                <div class="tit">
+                    付费员工管理首页
+                </div>
+                <div id="lineFirst"></div>
+                <div class="tabb">
+                    <span id="orderManage" ng-class="{blue:uuShow,oran:llShow}"  ng-click="showOrderManage()">订单管理</span>
+                    <span id="identityManage" ng-class="{blue:llShow,oran:uuShow}" ng-click="showAccountManage()">账号管理</span>
+                </div>
+                <div class="table">
+                    <div id="firstLi" style="list-style: none;position: relative"  ng-show="uuShow">
+                        <div class="uu">
+                            <div class="title">
+                                <span class="divide" style="font-size: 15px">编号</span>
+                                <span class="divide" style="font-size: 15px">员工账号</span>
+                                <span class="divide" style="font-size: 15px">付款方式</span>
+                                <span class="divide" style="font-size: 15px">订单号</span>
+                                <span class="divide" style="font-size: 15px">操作</span>
+                            </div>
+                            <div class="title" ng-repeat="item in dataArray">
+                                <span class="divide adapt">{{item.id}}</span>
+                                <span class="divide adapt">{{item.account_number}}</span>
+                                <span class="divide adapt">{{item.seller_id}}</span>
+                                <span class="divide adapt" style="">{{item.trade_no}}</span>
+                                <span class="divide">
+                                    <span class="return returnMoney" ng-click="backMoney()">退款</span>
+                                    <span class="return changeServiceTime" ng-click="ChangeTime()">修改服务时间</span>
+                                </span>
+                            </div>
+                        </div>
+                        <!--分页部分开始-->
+                        <div class="page" ng-show="pageShow" style="position: absolute">
+                            <div class="cont" style="width: 66%;left: 59%;">
+                                <div class="step prevLink" ng-click="prevPage()" style="float: left;position: relative;left: 0.3px;">上一页</div>
+                                <div style="float: left;overflow: hidden" id="orderSet">
+                                    <div class="st">
+                                        <div class="stt">
+                                            <div class="everyPage" ng-repeat="num in amount" ng-class="{true:'currentStep',false:'ste'}[num==currentPage]" ng-click="setPage(num)">{{num+1}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="step nextLink" style="position: relative;left: -3px;" ng-click="nextPage()">下一页</div>
+                                <div class="totalPageNumber">共{{totalPageNumber}}页</div>
+                                <div class="destination">跳转到第<input type="text" ng-model="pageN">页</div>
+                                <div class="certainJump"ng-click="certainJump()">确定</div>
+                                <div id="bac" ng-show="backk" ng-click="backRetu()">返回订单管理</div>
+                            </div>
+                        </div>
+                        <!--分页部分结束-->
+                    </div>
+                    <div id="secondLi" style="list-style: none;position: relative" ng-show="llShow">
+                        <div class="ll">
+                            <div class="titlee">
+                                <span class="dividee">员工账号</span>
+                                <span class="dividee">是否付费</span>
+                                <span class="dividee">姓名</span>
+                                <span class="dividee">操作</span>
+                            </div>
+                            <div class="titlee" ng-repeat="item in accountMana">
+                                <span class="dividee adaptt">{{item.account_number}}</span>
+                                <span class="dividee adaptt" ng-class="{true:'notPay',false:'pay'}[item.pay_status=='未付费']">{{item.pay_status}}</span>
+                                <span class="dividee adaptt">{{item.name}}</span>
+                                <span class="dividee changePassword" ng-click="passwordChange()">修改密码</span>
+                            </div>
+                        </div>
+                        <!--账号管理分页部分开始-->
+                        <div class="page" ng-show="pageShowN" style="position: absolute">
+                            <div class="cont" style="width: 66%;left: 59%;">
+                                <div class="step prevLink" ng-click="prevPageNum()" style="float: left;position: relative;left: 0.3px;">上一页</div>
+                                <div style="float: left;overflow: hidden" id="accountSet">
+                                    <div class="st">
+                                        <div class="tstt">
+                                            <div class="everyPage" ng-repeat="num in amountt" ng-class="{true:'currentStep',false:'ste'}[num==currentPageNum]" ng-click="setPageNum(num)">{{num+1}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="step nextLink" style="position: relative;left: -3px;" ng-click="nextPageNum()">下一页</div>
+                                <div class="totalPageNumber">共{{totalPageNum}}页</div>
+                                <div class="destination">跳转到第<input type="text" ng-model="pageNum">页</div>
+                                <div class="certainJump"ng-click="certainJumpPage()">确定</div>
+                                <div id="back" ng-show="backkk" ng-click="backReturn()">返回账号管理</div>
+                            </div>
+                        </div>
+                        <!--分页部分结束-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="back" ng-show="back">
+        <div class="main">
+            <div class="close" style="position: relative;left: 5px;top: 5px;" ng-click="closeReturn()">X</div>
+            <div class="title">退款操作{{solveMessage}}</div>
+            <div class="headPic"><img src={{backHeadImage}} alt=""></div>
+            <div class="staffNum">员工账号:{{backStaffAccount}}</div>
+            <div class="moneyy"><span class="mon">金额(￥)：</span><input maxlength="10" autofocus="autofocus" type="text" ng-model="mon" ng-keyup="moneyGiv()" id="numMon"></div>
+            <div class="description">
+                <textarea name="" id="are" cols="" rows="" ng-model="texa" ng-keyup="txtArea()"></textarea>
+            </div>
+            <!--<div class="returnMethod">
+                <div class="titl">选择退回账号:</div>
+                <input type="radio" class="ali" ng-model="ali" value="alia">
+                <div id="ali"><img src="img/ali.png" alt=""></div>
+                <input type="radio" class="tx" ng-model="ali" value="tx">
+                <div id="tx"><img src="img/tx.png" alt=""></div>
+            </div>-->
+            <div>
+                <div id="failure" ng-show="failure" ng-bind="fail"></div>
+                <div class="successReturnMoney" ng-show="successReturnMoney">退款成功</div>
+                <div id="btn" ng-click="certainReturnMoney()">提交</div>
+            </div>
+        </div>
+    </div>
+    <div class="changeSe" ng-show="changeServiceDate">
+        <div class="main">
+            <div class="close" style="position: relative;left: 5px;top: 5px;" ng-click="closeChange()">X</div>
+            <div class="title">修改服务时间</div>
+            <div class="headPic"><img src={{headImage}} alt=""></div>
+            <div class="staffNum">员工账号:{{staffOrder}}</div>
+            <div class="all">
+                <div  ng-model='timepickerTest'  ng-time class="input-group endTime date form_date" data-date="" data-date-format="yyyy-MM-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                    <span style="position: relative;left: -95px;top: -0.5px;">截止时间:</span><input class="form-control" size="16" type="text" ng-model="datt">
+                    <div class="changeEnd input-group-addon">修改截止时间<span class="glyphicon glyphicon-calendar"></span></div>
+                </div>
+            </div>
+            <div id="btnn" ng-click="certainChangeTime()">提交</div>
+        </div>
+    </div>
+    <div class="changePass" ng-show="changePass">
+        <div class="content">
+            <div class="close" style="position: relative;left: -5px;top: 4px;" ng-click="changePasswordClose()">X</div>
+            <div class="headTi">修改密码</div>
+            <div class="headPicture"><img src={{headIg}} alt=""></div>
+            <div class="staffNumber">员工账号:{{staffAccount}}</div>
+            <div class="main">
+                <div class="dis">请设置新密码（最少6位数）</div>
+                <input type="password" id="passWord" placeholder="新密码" ng-model="newPassword" ng-keyup="testNew()">
+                <div id="littleOne" ng-show="newP"><img src="img/littlePic.png" alt=""></div>
+                <input type="password" id="certainPassWord" placeholder="确认新密码" ng-model="certainNewPassword" ng-keyup="testCertainNewPassword()">
+                <div id="littleTwo" ng-show="certainNewP"><img src="img/littlePic.png" alt=""></div>
+                <div class="error" ng-show="errorMessageShow"  ng-repeat="item in errorMessage">{{item}}</div>
+            </div>
+            <div class="certain" ng-click="submitNewPassword()">确定</div>
+        </div>
+    </div>
+    <div class="changeSuccess" ng-show="showSuccess">
+        <div class="content">
+            <div class="close" style="position: relative;left: -5px;top: 4px;" ng-click="hideSuccess()">X</div>
+            <div class="imgg"><img src="img/exampleSuccess.png" alt=""></div>
+            <div class="suText">修改成功</div>
+            <div class="certainSuccess" ng-click="closeSuccess()">确定</div>
+        </div>
+    </div>
+</body>
+</html>

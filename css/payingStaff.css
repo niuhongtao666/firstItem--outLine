@@ -1,0 +1,1153 @@
+html,body{
+    width: 100%;
+    height:100%;
+    position: relative;
+}
+.left {
+    position: fixed;
+    top: 0;
+    left: 0px;
+    width: 16%;
+    height: 100%;
+    float: left;
+    background: #FFFFFF;
+    background: #2D2D43;
+    z-index: 10;
+}
+.left .smallLogo{
+    width: 60px;
+    height: 90px;
+    position: absolute;
+    top: 13%;
+    left: 50%;
+    margin-left: -30px;
+}
+.left .smallLogo img {
+    width: 100%;
+    height:100%;
+}
+.lineFirst {
+    width: 94%;
+    height: 0px;
+    border: 1px solid #575777;
+    position: absolute;
+    top: 33%;
+    left: 50%;
+    margin-left: -47%;
+}
+.left .smallLogoSec {
+    width: 43px;
+    height: 38px;
+    position: absolute;
+    top: 38%;
+    left: 50%;
+    margin-left: -22px;
+}
+.left .smallLogoSec img {
+    width: 100%;
+    height: 100%;
+}
+.left .name {
+    width: 182px;
+    height: 46px;
+    line-height: 20px;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    top: 47%;
+    margin-left: -91px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #fff;
+    letter-spacing: 0;
+}
+.pOne {
+    width: 182px;
+    height: 22px;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #4291F9;
+    letter-spacing: 0;
+    line-height: 22px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.left .smallLogoThr {
+    width: 43px;
+    height: 37.6px;
+    position: absolute;
+    top: 58%;
+    left: 50%;
+    margin-left: -22px;
+}
+.left .smallLogoThr img {
+    width: 100%;
+    height: 100%;
+}
+.left .code {
+    width: 182px;
+    height: 46px;
+    line-height: 20px;
+    position: absolute;
+    left: 50%;
+    top: 67%;
+    margin-left: -91px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #fff;
+    letter-spacing: 0;
+    text-align: center;
+}
+.pTwo {
+    width: 182px;
+    height: 22px;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #4291F9;
+    letter-spacing: 0;
+    line-height: 22px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.left .addStaff {
+    width: 120px;
+    height: 37px;
+    line-height: 37px;
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    margin-left: -60px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #4B95FE;
+    letter-spacing: 0;
+    border: 1px solid #4291F9;
+    border-radius: 6px;
+    padding-left: 53px;
+    box-sizing: border-box;
+}
+.xDirection {
+    width: 23px;
+    height: 3px;
+    position: absolute;
+    background: #4291F9;
+    top: 50%;
+    margin-top: -1.5px;
+    left: 15px;
+    border-radius: 2px;
+}
+.yDirection {
+    width: 3px;
+    height: 23px;
+    position: absolute;
+    background: #4291F9;
+    top: 50%;
+    margin-top: -11.5px;
+    left: 25px;
+    border-radius: 2px;
+}
+.left .out {
+    width: 28px;
+    height: 20px;
+    line-height: 20px;
+    position: absolute;
+    top: 92%;
+    left: 37px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #999999;
+    letter-spacing: 0;
+    cursor: pointer;
+}
+.right {
+    box-sizing: border-box;
+    float: right;
+    width: 84%;
+    /*height: 100%;*/
+    background: #FAFBFC;
+    /* padding-left: 250px; */
+    position: relative;
+}
+.right .head {
+    width: 100%;
+    height: 75px;
+    border-bottom: 1px solid #DFE2E3;
+    box-sizing: border-box;
+    z-index: 2;
+    /*background: #fff;*/
+    background: #F4F8F9;
+}
+.right .head .search{
+    position: absolute;
+    left: 127px;
+    top: 20px;
+    width: 481px;
+    height: 36px;
+    background: #FFFFFF;
+    border: 1px solid #F1F1F1;
+    border-radius: 100px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+}
+.right .head .search .lf{
+    width:79px;
+    height:20px;
+    line-height: 20px;
+    float: left;
+    padding-left: 24px;
+    font-family: PingFangSC-Regular;
+    font-size: 15px;
+    color: #999999;
+    letter-spacing: 0;
+    cursor: pointer;
+    /*background: red;*/
+}
+.right .head .search .lf span{
+    position: relative;
+    top:-2px;
+    line-height: 21.5px;
+    font-size: 14px;
+}
+.right .head .search .lf img{
+    width: 20px;
+    height:20px;
+    position: relative;
+    top: -4px;
+}
+.right .head .search .rt{
+    width: 390px;
+    height: 20px;
+    line-height: 18px;
+    float: left;
+    margin-left: 10px;
+    position: relative;
+    top: -1.5px;
+}
+.right .head .search .rt input{
+    width: 100%;
+    height:100%;
+}
+.right .head .status {
+    position: absolute;
+    /*display: inline-block;*/
+    width: 6px;
+    height:6px;
+    border-radius: 50%;
+    float: left;
+    right:131px;
+    top: 36px;
+    background-color: #7ED321;
+}
+.right .head .identity{
+    position: absolute;
+    right:90px ;
+    top:31px;
+    width: 36px;
+    height:14px;
+    line-height:14px;
+    font-family: PingFangSC-Regular;
+    font-size: 10px;
+    color: #4191F9;
+    letter-spacing: 0;
+}
+.right .head .headPic {
+    position: absolute;
+    top:21px;
+    right:44px;
+    width: 36px;
+    height:36px;
+    border-radius: 50%;
+}
+.right .head .headPic img{
+    width: 100%;
+    height:100%;
+    border-radius: 50%;
+}
+
+.right .main {
+    /*padding-top:76px ;*/
+    /*box-sizing: border-box;*/
+    width: 100%;
+    height:100%;
+    position: relative;
+    background: #fff;
+}
+.right .main .content{
+    width: 85%;
+    /*height:100%;*/
+    /*background: lightblue;*/
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding-top: 26px;
+    padding-bottom: 50px;
+    /*position: relative;*/
+}
+.right .main .content .tit{
+    width: 120px;
+    height:21px;
+    line-height: 21px;
+    text-align: center;
+    font-family: PingFangSC-Medium;
+    font-size: 15px;
+    color: #333333;
+    letter-spacing: 0;
+}
+.right .main .content #lineFirst {
+    width: 38px;
+    margin-top: 4px;
+    margin-bottom: 20px;
+    border:1px solid #4793FA;
+    border-radius: 100px;
+}
+.right .main .content .tabb{
+    width: 156px;
+    height:22px;
+    position: relative;
+    margin-bottom: 25px;
+    /*background: red;*/
+}
+.right .main .content .tabb #orderManage{
+    display: inline-block;
+    width:86px;
+    height:22px;
+    line-height: 22px;
+    text-align: center;
+    border-radius: 100px;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #FFFFFF;
+    letter-spacing: 0;
+    position: absolute;
+    top:0;
+    left:0;
+    cursor: pointer;
+}
+.blue{
+    color: #FFFFFF;
+    background: #4A9FFF;
+    z-index: 100;
+}
+.right .main .content .tabb #identityManage {
+    display: inline-block;
+    width:86px;
+    height:22px;
+    line-height: 22px;
+    text-align: center;
+    border-radius: 100px;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    letter-spacing: 0;
+    position: absolute;
+    top:0;
+    right: 0;
+    cursor: pointer;
+}
+.oran{
+    background: #FF6701;
+    color: #ccc;
+}
+.right .main .content .table{
+    width: 100%;
+    /*height:200px;*/
+    background: #F4F8F9;
+    box-shadow: 1px 1px 4px 0 rgba(0,0,0,0.25);
+    border-radius: 4px;
+    /*margin-bottom: 40px;*/
+}
+.right .main .content .table .uu{
+    width: 100%;
+    height:100%;
+    list-style: none;
+}
+.right .main .content .table .ll{
+    width: 100%;
+    height:100%;
+    list-style: none;
+}
+.right .main .content .table .uu .title{
+    width: 100%;
+    height:49px;
+    padding-left: 3px;
+    border-bottom: 1px solid #E1E1E1;
+}
+.right .main .content .table .ll .titlee{
+    width: 100%;
+    height:49px;
+    padding-left: 3px;
+    border-bottom: 1px solid #E1E1E1;
+}
+.right .main .content .table .ll .titlee .dividee{
+    display: inline-block;
+    width: 24.6%;
+    height:100%;
+    line-height: 49px;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    /*color: #333333;*/
+    letter-spacing: 0;
+    text-align: center;
+    position: relative;
+    /*top:-24.5px;*/
+}
+.right .main .content .table .uu .title .divide{
+    display: inline-block;
+    width: 19.6%;
+    height:100%;
+    line-height: 49px;
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: #333333;
+    letter-spacing: 0;
+    text-align: center;
+    position: relative;
+    /*top:-24.5px;*/
+}
+
+.right .main .content .table .uu .title .adapt {
+    top:-19.5px;
+}
+.right .main .content .table .ll .titlee .changePassword {
+    line-height: 48px;
+    text-align: center;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #4A9FFF;
+    letter-spacing: 0;
+    cursor: pointer;
+}
+.right .main .content .table .uu .title .divide .return{
+    ont-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #4A9FFF;
+    letter-spacing: 0;
+    height: 100%;
+    line-height:49px;
+    display: inline-block;
+    position: absolute;
+}
+.right .main .content .table .uu .title .divide .returnMoney {
+    width: 38%;
+    /*margin-left: 1px;*/
+    text-align: right;
+    left:0;
+    top:0;
+    cursor: pointer;
+}
+.right .main .content .table .uu .title .divide .changeServiceTime {
+    width:60%;
+    text-align: center;
+    right:0;
+    top:0;
+    cursor: pointer;
+}
+.back{
+    width: 100%;
+    height:100%;
+    position: fixed;
+    background: rgba(45,45,67,0.47);
+    z-index: 1000;
+}
+.back .main{
+    width:300px ;
+    height:403px;
+    position: absolute;
+    top:50%;
+    margin-top: -228px;
+    left:50%;
+    margin-left: -150px;
+    background: #FFFFFF;
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.13);
+    border-radius: 10px;
+    padding-left: 13px;
+    padding-right: 13px;
+    box-sizing: border-box;
+}
+.back .main .title{
+    width: 150px;
+    height:20px;
+    line-height: 20px;
+    text-align: center;
+    position: absolute;
+    left: 15px;
+    top:19px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #333333;
+    letter-spacing: 0;
+}
+.back .main .headPic {
+    width: 52px;
+    height:52px;
+    position: absolute;
+    top:73px;
+    left:50%;
+    margin-left: -26px;
+    border-radius: 50%;
+}
+.back .main .headPic img{
+    position: absolute;
+    left:0;
+    top:0;
+    width: 100%;
+    height:100%;
+    border-radius: 50%;
+}
+.back .main .staffNum{
+    width: 100%;
+    height:14px;
+    height:14px;
+    text-align: center;
+    position: absolute;
+    top:145px;
+    left:50%;
+    /*margin-left: -54px;*/
+    transform: translateX(-50%);
+    -ms-transform:translateX(-50%); 	/* IE 9 */
+    -moz-transform:translateX(-50%);	/* Firefox */
+    -webkit-transform:translateX(-50%); /* Safari 和 Chrome */
+    -o-transform:translateX(-50%); 	/* Opera */
+    font-family: PingFangSC-Regular;
+    font-size: 10px;
+    color: #999999;
+    letter-spacing: 0;
+}
+.back .main .moneyy {
+    width: 87px;
+    height:20px;
+    line-height: 20px;
+    position: absolute;
+    left:48.5%;
+    top:175px;
+    transform: translateX(-50%);
+    -ms-transform:translateX(-50%); 	/* IE 9 */
+    -moz-transform:translateX(-50%);	/* Firefox */
+    -webkit-transform:translateX(-50%); /* Safari 和 Chrome */
+    -o-transform:translateX(-50%); 	/* Opera */
+    /*border: 1px solid red ;*/
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #333333;
+    letter-spacing: 0;
+}
+.back .main .moneyy .mon {
+    height: 20px;
+    line-height: 20px;
+    position: absolute;
+    left:0;
+    top:0;
+}
+.back .main .moneyy input{
+    display: inline-block;
+    /*width: 100%;*/
+    height:100%;
+    box-sizing: border-box;
+    padding-left: 60px;
+    /*padding-right: 21px;*/
+    width: 143px;
+    /*border: 1px solid black;*/
+}
+.back .main .description{
+    width: 272px;
+    height:100px;
+    position: absolute;
+    left: 50%;
+    margin-left: -136px;
+    top:211px;
+    border-radius: 2px;
+    /*background: red;*/
+}
+.back .main .description #are{
+    width: 272px;
+    height:100px;
+    resize: none;
+    outline: none;
+    font-family: PingFangSC-Regular;
+    font-size: 10px;
+    color: #999999;
+    letter-spacing: 0;
+    box-sizing: border-box;
+    padding: 2px;
+}
+.back .main .returnMethod{
+    width: 272px;
+    height: 100px;
+    position: absolute;
+    left:50%;
+    margin-left: -136px;
+    top:278px;
+    /*border: 1px solid red;*/
+}
+.back .main .returnMethod .titl{
+    width: 75px;
+    height:16px;
+    line-height: 16px;
+    text-align: center;
+    font-family: PingFangSC-Regular;
+    font-size: 10px;
+    color: #999999;
+    letter-spacing: 0;
+}
+.back .main .returnMethod .ali{
+    width: 10px;
+    height:10px;
+    position: absolute;
+    left:50px;
+    top:57px;
+}
+.back .main .returnMethod #ali{
+    width: 42px;
+    height:42px;
+    position: absolute;
+    left:72px;
+    top:42px;
+}
+.back .main .returnMethod #ali img{
+    width: 100%;
+    height:100%;
+    position: absolute;
+    left:0;
+    top:0;
+}
+.back .main .returnMethod .tx{
+    width: 10px;
+    height:10px;
+    position: absolute;
+    left:150px;
+    top:57px;
+}
+.back .main .returnMethod #tx{
+    width: 52px;
+    height:42px;
+    position: absolute;
+    left:172px;
+    top:42px;
+}
+.back .main .returnMethod #tx img{
+    width: 100%;
+    height:100%;
+    position: absolute;
+    left:0;
+    top:0;
+}
+.back .main #btn{
+    width: 272px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    background: #4592FA;
+    border-radius: 4px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #FFFFFF;
+    letter-spacing: 0;
+    position: absolute;
+    top: 346px;
+    left: 50%;
+    margin-left: -136px;
+    cursor: pointer;
+}
+.changeSe{
+    width: 100%;
+    height:100%;
+    position: fixed;
+    background: rgba(45,45,67,0.47);
+    z-index: 1000;
+}
+.changeSe .main{
+    width:300px ;
+    height:369px;
+    position: absolute;
+    top:50%;
+    margin-top: -184.5px;
+    left:50%;
+    margin-left: -150px;
+    background: #FFFFFF;
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.13);
+    border-radius: 10px;
+    padding-left: 13px;
+    padding-right: 13px;
+    box-sizing: border-box;
+}
+.changeSe .main .title{
+    width: 84px;
+    height:20px;
+    line-height: 20px;
+    text-align: center;
+    position: absolute;
+    left: 15px;
+    top:19px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #333333;
+    letter-spacing: 0;
+}
+.changeSe .main .headPic {
+    width: 52px;
+    height:52px;
+    position: absolute;
+    top:73px;
+    left:50%;
+    margin-left: -26px;
+    border-radius: 50%;
+}
+.changeSe .main .headPic img{
+    position: absolute;
+    left:0;
+    top:0;
+    width: 100%;
+    height:100%;
+    border-radius: 50%;
+}
+.changeSe .main .staffNum{
+    width: 100%;
+    height:14px;
+    height:14px;
+    text-align: center;
+    position: absolute;
+    top:145px;
+    left:50%;
+    margin-left: -150px;
+    font-family: PingFangSC-Regular;
+    font-size: 10px;
+    color: #999999;
+    letter-spacing: 0;
+}
+.changeSe .main #btnn{
+    width:248px ;
+    height:34px;
+    line-height:34px;
+    text-align: center;
+    background: #4592FA;
+    border-radius: 4px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #FFFFFF;
+    letter-spacing: 0;
+    position: absolute;
+    top:303px;
+    left:50%;
+    margin-left: -124px;
+    cursor: pointer;
+}
+.changeSe .main .all {
+    width: 170px;
+    /*border: 1px solid red;*/
+    height:53px;
+    position: absolute;
+    top:172px;
+    left:50%;
+    margin-left: -85px;
+}
+.changeSe .main .all .input-group{
+    width: 170px;
+    height:22px;
+    line-height: 22px;
+    /*text-align: center;*/
+    /*background: red;*/
+    position: absolute;
+    left:50%;
+    margin-left: -85px;
+    top:0px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #333333;
+    letter-spacing: 0;
+    padding-left: 9px;
+}
+.changeSe .main .all .endTime .form-control{
+    width: 93px;
+    height: 20px;
+    position: relative;
+    left: 65px;
+    /*top: -21px;*/
+    font-size: 12px;
+    padding: 0px;
+    /*padding-left: 10px;*/
+    background: #fff;
+    /*border: none!important;*/
+    border-radius: 0px;
+    text-align: center;
+    outline: none;
+    top: 1px;
+}
+.changeSe .main .all .changeEnd {
+    width: 104px;
+    height: 25px;
+    line-height: 15px;
+    font-family: PingFangSC-Regular;
+    font-size: 10px;
+    color: #4592FA;
+    letter-spacing: 0;
+    position: absolute;
+    left:50%;
+    margin-left: -52px;
+    top:34px;
+    /*background: url("../img/calen.png") no-repeat right center;*/
+    background-size: 15px 15px;
+    border: none;
+    background: #fff;
+    cursor: pointer;
+}
+.changePass {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: rgba(45, 45, 67, 0.47);
+    z-index: 100;
+}
+.changeSuccess {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: rgba(45, 45, 67, 0.47);
+    z-index: 100;
+}
+.changeSuccess .content{
+    width: 400px;
+    height:492px;
+    position: absolute;
+    top:50%;
+    margin-top: -246px;
+    left:50%;
+    margin-left: -200px;
+    background: #FFFFFF;
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.13);
+    border-radius: 10px;
+}
+.changeSuccess .content .imgg{
+    width: 75px;
+    height:75px;
+    position: absolute;
+    left:50%;
+    margin-left: -37.5px;
+    top:156px;
+}
+.changeSuccess .content .imgg img{
+    width: 100%;
+    height:100%;
+}
+.changeSuccess .content .suText {
+    width: 56px;
+    height:20px;
+    line-height:20px;
+    text-align: center;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #333333;
+    letter-spacing: 0;
+    position: absolute;
+    left:50%;
+    margin-left: -28px;
+    top:265px;
+}
+.changeSuccess .content .certainSuccess {
+    width: 248px;
+    height:34px;
+    line-height:34px;
+    text-align: center;
+    position: absolute;
+    left:50%;
+    margin-left: -124px;
+    top:416px;
+    background: #4592FA;
+    border-radius: 4px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #FFFFFF;
+    letter-spacing: 0;
+    cursor: pointer;
+}
+.changePass .content{
+    width: 404px;
+    height:492px;
+    position: absolute;
+    top:50%;
+    margin-top: -246px;
+    left:50%;
+    margin-left: -202px;
+    background: #FFFFFF;
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.13);
+    border-radius: 10px;
+}
+.changePass .content .headTi{
+    width: 70px;
+    height:20px;
+    line-height:20px;
+    position: absolute;
+    top:24px;
+    left:22px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #333333;
+    letter-spacing: 0;
+}
+.changePass .content .headPicture{
+    width: 66px;
+    height:66px;
+    position: absolute;
+    top:86px;
+    left:50%;
+    margin-left: -33px;
+    /*background: red;*/
+    border-radius: 50%;
+
+}
+.changePass .content .headPicture img{
+    width: 100%;
+    height:100%;
+    border-radius: 50%;
+}
+.changePass .content .staffNumber {
+    /*width: 109px;*/
+    height:18px;
+    line-height:18px;
+    text-align: center;
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: #999999;
+    letter-spacing: 0;
+    position: absolute;
+    left:50%;
+    /*margin-left: -54.5px;*/
+    transform: translateX(-50%);
+    -ms-transform:translateX(-50%); 	/* IE 9 */
+    -moz-transform:translateX(-50%);	/* Firefox */
+    -webkit-transform:translateX(-50%); /* Safari 和 Chrome */
+    -o-transform:translateX(-50%); 	/* Opera */
+    top:168px;
+}
+.changePass .content .main {
+    width:260px ;
+    height:194px;
+    /*border: 1px solid red;*/
+    position: absolute;
+    left:50%;
+    top:216px ;
+    margin-left: -130px;
+}
+.changePass .content .main .dis{
+    height: 20px;
+    line-height: 20px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #333333;
+    letter-spacing: 0;
+}
+.changePass .content .main #passWord {
+    width:260px;
+    height:34px;
+    margin-top: 12px;
+    border: 1px solid #E1E1E1;
+    box-sizing: border-box;
+    padding-left: 5px;
+    margin-bottom: 10px;
+}
+.changePass .content .main #certainPassWord {
+    width:260px;
+    height:34px;
+    border: 1px solid #E1E1E1;
+    box-sizing: border-box;
+    padding-left: 5px;
+    margin-bottom: 10px;
+}
+.changePass .content .main .error {
+    /*width: 95px;*/
+    height:20px;
+    line-height: 20px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #FF6701;
+    letter-spacing: 0;
+    box-sizing: border-box;
+    padding-left:22px ;
+    background: url("../img/attention.png") no-repeat left center;
+    background-size: 16px 16px;
+}
+.changePass .content .certain{
+    width: 248px;
+    height:34px;
+    line-height: 34px;
+    text-align: center;
+    background: #4592FA;
+    border-radius: 4px;
+    position: absolute;
+    top:416px;
+    left:50%;
+    margin-left: -124px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #FFFFFF;
+    letter-spacing: 0;
+    cursor: pointer;
+}
+.st{
+    display: inline-block;
+    float: left;
+    /*width: 234px;*/
+    height:26px;
+    /*border: 1px solid red;*/
+    position: relative;
+    /*overflow: hidden;*/
+    /*top: -1px;*/
+    /*z-index: -100;*/
+}
+.stt{
+    /*width: 12500000%;*/
+    height: 26px;
+    /*position: absolute;
+    top:0px;
+    left:1px;*/
+    transition:left 1s linear;
+    -moz-transition:left 1s linear; /* Firefox 4 */
+    -webkit-transition:left 1s linear; /* Safari 和 Chrome */
+    -o-transition:left 1s linear; /* Opera */
+}
+.tstt{
+    /*width: 12500000%;*/
+    height: 26px;
+    /*position: absolute;*/
+    /*top:0px;*/
+    /*left:1px;*/
+    transition:left 1s linear;
+    -moz-transition:left 1s linear; /* Firefox 4 */
+    -webkit-transition:left 1s linear; /* Safari 和 Chrome */
+    -o-transition:left 1s linear; /* Opera */
+}
+.everyPage{
+    width: 24px;
+    height:24px;
+}
+.totalPageNumber{
+    width: 53px;
+    height:24px;
+    float: left;
+    /*border: 1px solid red;*/
+    margin-left: 5px;
+    line-height:24px;
+    text-align: center;
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: #aaa;
+    letter-spacing: 0;
+}
+.destination{
+    width: 110px;
+    height:24px;
+    float: left;
+    /*border: 1px solid red;*/
+    margin-left: 5px;
+    line-height:24px;
+    /*text-align: center;*/
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #aaa;
+    letter-spacing: 0;
+}
+.destination input{
+    width: 33px;
+    height:22px;
+    line-height: 22px;
+    border: 1px solid #ccc;
+    margin-left: 2px;
+    margin-right: 2px;
+    position: relative;
+    top:-1px;
+    text-align: center;
+}
+.certainJump{
+    float: left;
+    width: 33px;
+    height:22px;
+    line-height: 22px;
+    border: 1px solid #ccc;
+    margin-left: 2px;
+    margin-right: 2px;
+    position: relative;
+    top:-1px;
+    text-align: center;
+    cursor: pointer;
+}
+.notPay{
+    color: #FF6701;
+}
+.pay{
+    color:#333;
+}
+#littleOne{
+    width: 14px;
+    height: 14px;
+    position: absolute;
+    top: 42px;
+    right: -23px;
+}
+#littleOne img{
+    width: 100%;
+    height:100%;
+    position: absolute;
+    left:0px;
+    right:0px;
+}
+#littleTwo{
+    width: 14px;
+    height: 14px;
+    position: absolute;
+    top: 86px;
+    right: -23px;
+}
+#littleTwo img{
+    width: 100%;
+    height:100%;
+    position: absolute;
+    left:0px;
+    right:0px;
+}
+#failure{
+    width: 273px;
+    box-sizing: border-box;
+    /* height: 20px; */
+    line-height: 20px;
+    background: url(../img/attention.png) no-repeat left center;
+    background-size: 16px 16px;
+    position: absolute;
+    top: 318px;
+    left: 16px;
+    padding-left: 17px;
+    word-wrap: break-word;
+}
+#bac{
+    float: left;
+    width: 87px;
+    height: 20px;
+    line-height: 20px;
+    margin-left: 20px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+#back{
+    float: left;
+    width: 87px;
+    height: 20px;
+    line-height: 20px;
+    margin-left: 20px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+.successReturnMoney{
+    width: 273px;
+    box-sizing: border-box;
+    /* height: 20px; */
+    line-height: 20px;
+    background: url(../img/littlePic.png) no-repeat left center;
+    background-size: 16px 16px;
+    position: absolute;
+    top: 318px;
+    left: 16px;
+    padding-left: 17px;
+    word-wrap: break-word;
+}
+
+
+
+
+

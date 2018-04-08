@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>管理员工</title>
+    <link rel="stylesheet" href="css/base.css?v=212">
+    <link rel="stylesheet" href="css/manageStaffEnter.css?v=1">
+    <link rel="stylesheet" href="css/angular.css?v=22">
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+    <!--[if lt IE 9]>
+    <script src="lib/html5shiv/html5shiv.min.js"></script>
+    <script src="lib/respond/respond.min.js"></script>
+    <![endif]-->
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="angular/angular.min.js"></script>
+    <script src="js/echarts.min.js"></script>
+    <script src="js/manageStaffEnter.js?v=22"></script>
+    <style>
+        body{
+            overflow-x: hidden;
+        }
+        .canvas{
+            left: -23px!important;
+            width: 225px!important;
+            /*padding-top: 10px!important;*/
+            padding: 0!important;
+        }
+        canvas{
+            margin-top: 9px!important
+        }
+    </style>
+</head>
+<body>
+    <!--左侧部分开始-->
+    <div class="left">
+        <div class="smallLogo"><img src="img/web-logo.png" alt=""></div>
+        <div class="lineFirst"></div>
+        <div class="smallLogoSec"><img src="img/businessName.png" alt=""></div>
+        <div class="name"><p class="pOne">公司名称</p>{{businessEnterName}}</div>
+        <div class="smallLogoThr"><img src="img/businessCode.png" alt=""></div>
+        <div class="code"><p class="pTwo">公司代码</p>{{businessEnterCode}}</div>
+        <div class="addStaff" ng-click="addNewStaff()">
+            <div class="xDirection"></div>
+            <div class="yDirection"></div>
+            添加员工
+        </div>
+        <div class="out" ng-click="deleteEnterToken()">登出</div>
+    </div>
+    <!--左侧部分结束-->
+    <div class="center" style="width: 16%;float: left;"></div>
+    <!--右侧部分开始-->
+    <div class="right">
+        <div class="head">
+            <div class="search">
+                <div class="lf" ng-click="searchEnter()">
+                    <img src="img/sear.png" alt="">
+                    <span>搜索</span>
+                </div>
+                <div class="rt">
+                    <input type="text" placeholder="输入员工姓名\账号" ng-model="searchInfo">
+                </div>
+            </div>
+            <span class="status"></span>
+            <span class="identity">管理员</span>
+            <span class="headPic">
+                 <img src="img/headPic.jpg" alt="">
+            </span>
+        </div>
+        <div class="center">
+            <div class="registed">注册用户</div>
+            <div class="bottomLine"></div>
+            <div class="todayLogin">
+                <span class="todayLoginText">今日注册</span>
+                <span class="account">{{toReg}}</span>
+            </div>
+            <div class="todayBuy">
+                <span class="todayBuyText">今日购买</span>
+                <span class="accountBuy">{{toBuy}}</span>
+            </div>
+        </div>
+        <div class="con">
+                <div class="staffTable">员工报表</div>
+                <div class="bottomLineSec"></div>
+                <div class="above">
+                <div class="container" style="margin-top:30px;width: 100%;margin-bottom: 90px;">
+                    <div class="row">
+                        <div class="single col-lg-2 col-md-3 col-sm-4" ng-repeat="value in staff ">
+                            <div class="close" style="position: relative;left: 10px;top: -10px;" ng-click="closeDelete()">×</div>
+                            <div class="headPic"><img ng-src={{value.headimgurl}} alt=""></div>
+                            <div class="staffName">姓名：{{value.name}}</div>
+                            <!--<div class="staffName">姓名：{{value.name}}</div>-->
+                            <div class="staffNum" id={{value.account_number}}>账号&nbsp;：{{value.account_number}}</div>
+                            <!--<div class="email">lct0825@163.com</div>-->
+                            <div class="bottom">
+                                <div class="tp" id={{value.is_allow}}>是否禁用
+                                    <span id="yes" ng-click="change()" ng-class="{yes1:value.is_allow,no:!value.is_allow}">是</span>
+                                    <span id="no" ng-click="change()" ng-class="{no:value.is_allow,yes:!value.is_allow}">否</span>
+                                </div>
+                                <div class="btm">
+                                    <div class="traffic">员工流量</div>
+                                    <!--<canvas class="myCanvas" width="179" height="70" style="position: absolute;left: 0;top: -2px;"></canvas>-->
+                                    <div class="panel-body canvas" style="width:179px;height:70px;" echarts="searchCostOption" ></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--分页部分开始-->
+                    <!--<div class="page" ng-show="pShow">
+                        <div class="cont">
+                            <a class="step prevLink" ng-click="prevPage()" style="float: left;">上一页</a>
+                            <a ng-repeat="num in amount" ng-class="{true:'currentStep',false:'ste'}[num==currentPage]" ng-click="setPage(num)">{{num+1}}</a>
+                            <a class="step nextLink" style="float: right;" ng-click="nextPage()">下一页</a>
+                        </div>
+                    </div>-->
+                    <!--分页部分结束-->
+                    <!--员工报表分页部分开始-->
+                    <div class="page" style="position: absolute" ng-show="pageShowN" style="width:91%">
+                        <div class="cont" style="width: 59%;left: 53%;">
+                            <div class="step prevLink" ng-click="prevPageNum()" style="float: left;position: relative;left: 0.3px;">上一页</div>
+                            <div style="float: left;overflow: hidden;height: 24px;" id="accountSet">
+                                <div class="st" style="height: 24px;position: relative">
+                                    <div class="tstt">
+                                        <div class="everyPage" ng-repeat="num in amountt" ng-class="{true:'currentStep',false:'ste'}[num==currentPageNum]" ng-click="setPageNum(num)">{{num+1}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="step nextLink" style="position: relative;left: -3px;" ng-click="nextPageNum()">下一页</div>
+                            <div class="totalPageNumber">共{{totalPageNum}}页</div>
+                            <div class="destination">跳转到第<input type="text" ng-model="pageNum">页</div>
+                            <div class="certainJump"ng-click="certainJumpPage()">确定</div>
+                        </div>
+                    </div>
+                    <!--员工报表分页部分结束-->
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div id="addSta" ng-class="{hide:hidd}">
+        <div class="content">
+            <div class="title">Add Staff</div>
+            <div class="name"><input type="text" placeholder="员工姓名" ng-model="staffEnterName"></div>
+            <div class="account"><input type="text" placeholder="员工账号" ng-model="staffEnterAccount"></div>
+            <div class="error">
+                <div ng-repeat="item in addStaffError" ng-show="errorAddStaff">{{item.code}}</div>
+            </div>
+            <div class="certain" ng-click="certain()">确认</div>
+            <div class="close" ng-click="closeNewStaff()">X</div>
+        </div>
+    </div>
+    <div id="successSta" ng-class="{hide:hiddee}">
+        <!--ng-class="{hide:hiddee}"-->
+        <div class="content">
+            <div class="success"></div>
+            <div class="pMessage">添加成功</div>
+            <div class="continueAdd" ng-click="conAdd()">继续添加</div>
+            <div class="close" ng-click="closeStaff()">X</div>
+        </div>
+    </div>
+    <div id="successClose" ng-class="{hide:hiddenn}">
+        <div class="content">
+            <p id="message">确定删除该员工吗？</p>
+            <div class="certa" ng-click="closeDele()">确定</div>
+            <div class="cancel" ng-click="cancelDele()">取消</div>
+        </div>
+    </div>
+</body>
+</html>

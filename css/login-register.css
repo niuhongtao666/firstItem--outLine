@@ -1,0 +1,70 @@
+html,body{
+    width: 100%;
+    height: 100%;
+    background: url("../img/login-register.png") no-repeat left center;
+    background-size: 100% 100%;
+    position: relative;
+}
+.web-logo {
+    width: 80px;
+    height:119px;
+    /*position: absolute;*/
+    /*top:17px;*/
+    /*left:50%;*/
+    margin: 0 auto ;
+    margin-top:17px;
+    background: url("../img/web-logo.png") no-repeat center center;
+    background-size: 80px 119px;
+}
+/*.web-logo img {*/
+    /*width: 100%;*/
+    /*height:100%;*/
+/*}*/
+.login {
+    width: 248px;
+    height: 34px;
+    /* position: absolute; */
+    /* top: 162px; */
+    /* left: 50%; */
+    /* margin-left: -124px; */
+    margin: 0 auto;
+    margin-top: 29px;
+    border: 1px solid #4592FA;
+    border-radius: 4px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #4592FA;
+    letter-spacing: 0;
+    line-height: 34px;
+    text-align: center;
+}
+.register {
+    width: 248px;
+    height: 34px;
+    /* position: absolute; */
+    /* top: 223px; */
+    /* left: 50%; */
+    /* margin-left: -124px; */
+    border: 1px solid #4592FA;
+    border-radius: 4px;
+    background: #4592FA;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #FFFFFF;
+    letter-spacing: 0;
+    line-height: 34px;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 22px;
+}
+.content{
+    width: 486px;
+    /* border: 1px solid red; */
+    position: absolute;
+    height: 310px;
+    left: 50%;
+    /* top: 20px; */
+    top: 41%;
+    margin-top: -155px;
+    margin-left: -243px;
+}

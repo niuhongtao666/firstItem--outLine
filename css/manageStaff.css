@@ -1,0 +1,403 @@
+html,body{
+    width: 100%;
+    height:100%;
+    position: relative;
+}
+.left {
+    position: fixed;
+    top: 0;
+    left: 0px;
+    width: 16%;
+    height: 100%;
+    float: left;
+    background: #FFFFFF;
+    background: #2D2D43;
+    z-index: 10;
+}
+.left .smallLogo{
+    width: 60px;
+    height: 90px;
+    position: absolute;
+    top: 13%;
+    left: 50%;
+    margin-left: -30px;
+}
+.left .smallLogo img {
+    width: 100%;
+    height:100%;
+}
+.lineFirst {
+    width: 94%;
+    height: 0px;
+    border: 1px solid #575777;
+    position: absolute;
+    top: 33%;
+    left: 50%;
+    margin-left: -47%;
+}
+.left .smallLogoSec {
+    width: 43px;
+    height: 38px;
+    position: absolute;
+    top: 38%;
+    left: 50%;
+    margin-left: -22px;
+}
+.left .smallLogoSec img {
+    width: 100%;
+    height: 100%;
+}
+.left .name {
+    width: 182px;
+    height: 46px;
+    line-height: 20px;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    top: 47%;
+    margin-left: -91px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #fff;
+    letter-spacing: 0;
+}
+.pOne {
+    width: 182px;
+    height: 22px;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #4291F9;
+    letter-spacing: 0;
+    line-height: 22px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.left .smallLogoThr {
+    width: 43px;
+    height: 37.6px;
+    position: absolute;
+    top: 58%;
+    left: 50%;
+    margin-left: -22px;
+}
+.left .smallLogoThr img {
+    width: 100%;
+    height: 100%;
+}
+.left .code {
+    width: 182px;
+    height: 46px;
+    line-height: 20px;
+    position: absolute;
+    left: 50%;
+    top: 67%;
+    margin-left: -91px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #fff;
+    letter-spacing: 0;
+    text-align: center;
+}
+.pTwo {
+    width: 182px;
+    height: 22px;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #4291F9;
+    letter-spacing: 0;
+    line-height: 22px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.left .addStaff {
+    width: 120px;
+    height: 37px;
+    line-height: 37px;
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    margin-left: -60px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #4B95FE;
+    letter-spacing: 0;
+    border: 1px solid #4291F9;
+    border-radius: 6px;
+    padding-left: 53px;
+    box-sizing: border-box;
+}
+.xDirection {
+    width: 23px;
+    height: 3px;
+    position: absolute;
+    background: #4291F9;
+    top: 50%;
+    margin-top: -1.5px;
+    left: 15px;
+    border-radius: 2px;
+}
+.yDirection {
+    width: 3px;
+    height: 23px;
+    position: absolute;
+    background: #4291F9;
+    top: 50%;
+    margin-top: -11.5px;
+    left: 25px;
+    border-radius: 2px;
+}
+.left .out {
+    width: 28px;
+    height: 20px;
+    line-height: 20px;
+    position: absolute;
+    top: 92%;
+    left: 37px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #999999;
+    letter-spacing: 0;
+    cursor: pointer;
+}
+.right {
+    box-sizing: border-box;
+    float: right;
+    width: 84%;
+    height: 100%;
+    /*background: #FAFBFC;*/
+    /* padding-left: 250px; */
+    position: relative;
+}
+.right .head {
+    width: 100%;
+    height: 75px;
+    border-bottom: 1px solid #DFE2E3;
+    box-sizing: border-box;
+    z-index: 2;
+    /*background: #fff;*/
+    background: #F4F8F9;
+}
+.right .head .search{
+    position: absolute;
+    left: 127px;
+    top: 20px;
+    width: 481px;
+    height: 36px;
+    background: #FFFFFF;
+    border: 1px solid #F1F1F1;
+    border-radius: 100px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.right .head .search .lf{
+    width: 79px;
+    height: 20px;
+    line-height: 20px;
+    float: left;
+    padding-left: 24px;
+    font-family: PingFangSC-Regular;
+    font-size: 15px;
+    color: #999999;
+    letter-spacing: 0;
+    cursor: pointer;
+}
+.right .head .search .lf span{
+    position: relative;
+    top:-2px;
+    line-height: 22px;
+    font-size: 14px;
+}
+.right .head .search .lf img{
+    width: 20px;
+    height:20px;
+    position: relative;
+    top: -4px;
+}
+.right .head .search .rt{
+    width: 390px;
+    height: 20px;
+    line-height: 20px;
+    float: left;
+    margin-left: 10px;
+    position: relative;
+    top: -1.5px;
+}
+.right .head .search .rt input{
+    width: 100%;
+    height:100%;
+}
+.right .head .status {
+    position: absolute;
+    /*display: inline-block;*/
+    width: 6px;
+    height:6px;
+    border-radius: 50%;
+    float: left;
+    right:131px;
+    top: 41px;
+    background-color: #7ED321;
+}
+.right .head .identity{
+    position: absolute;
+    right:90px ;
+    top:36px;
+    width: 36px;
+    height:14px;
+    line-height:14px;
+    font-family: PingFangSC-Regular;
+    font-size: 10px;
+    color: #4191F9;
+    letter-spacing: 0;
+}
+.right .head .headPic {
+    position: absolute;
+    top:25px;
+    right:44px;
+    width: 36px;
+    height:36px;
+    border-radius: 50%;
+}
+.right .head .headPic img{
+    width: 100%;
+    height:100%;
+    border-radius: 50%;
+}
+
+.right .main {
+    /*padding-top:76px ;*/
+    box-sizing: border-box;
+    width: 100%;
+    height:100%;
+    position: relative;
+}
+.right .main .registerPic{
+    width: 120px;
+    height: 120px;
+    position: absolute;
+    left: 0px;
+    /*top: 40%;*/
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    /*margin-top: -60px;*/
+    /*margin-top: 190px;*/
+ }
+.right .main .registerPic img{
+    width: 100%;
+    height:100%;
+}
+.right .main .checkPic{
+    width: 120px;
+    height:120px;
+    position: absolute;
+    left:221px;
+    /*top:40%;*/
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    /*margin-top: -60px;*/
+    /*margin-top: 190px;*/
+}
+.right .main .checkPic img{
+    width: 100%;
+    height:100%;
+}
+.right .main .completedPic{
+    width: 120px;
+    height:120px;
+    position: absolute;
+    left:423px;
+    /*top:40%;*/
+    /*margin-top: -60px;*/
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    /*margin-top: 190px;*/
+}
+.right .main .completedPic img{
+    width: 100%;
+    height:100%;
+}
+.right .main .register {
+    width: 28px;
+    height:20px;
+    position: absolute;
+    top:230px;
+    left:42px;
+    line-height: 20px;
+    text-align: center;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #4592FA;
+    letter-spacing: 0;
+}
+.right .main .line1{
+    width: 122.5px;
+    height:1px;
+    position: absolute;
+    top:240px;
+    left:114px;
+    border-bottom: 1px solid #4592FA;
+}
+.right .main .check {
+    width: 28px;
+    height:20px;
+    position: absolute;
+    top:230px;
+    left:270px;
+    line-height: 20px;
+    text-align: center;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #4592FA;
+    letter-spacing: 0;
+}
+.right .main .line2{
+    width: 122.5px;
+    height:1px;
+    position: absolute;
+    top:240px;
+    left:330px;
+    border-bottom: 1px solid #999999;
+}
+.right .main .completed {
+    width: 28px;
+    height:20px;
+    position: absolute;
+    top:230px;
+    left:473px;
+    line-height: 20px;
+    text-align: center;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #999999;
+    letter-spacing: 0;
+}
+.content {
+    width:550px ;
+    /*border: 1px solid red;*/
+    height: 300px;
+    margin: 0 auto;
+    position: relative;
+    margin-top: 15%;
+}
+.btm{
+    width: 122.5px;
+    height: 1px;
+    position: absolute;
+    top: 440px;
+    left: 330px;
+    border-bottom: 1px solid #4592FA!important;
+}
+.fontCol{
+    width: 28px;
+    height:20px;
+    position: absolute;
+    top:430px;
+    left:473px;
+    line-height: 20px;
+    text-align: center;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    letter-spacing: 0;
+    color:#4592FA;
+}
+
+

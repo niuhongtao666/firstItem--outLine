@@ -1,0 +1,2504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <link rel="stylesheet" href="css/change.css">
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="angular1.6.9/angular.min.js"></script>
+    <script src="angular1.6.9/angular-animate.min.js"></script>
+    <script src="angular1.6.9/angular-route.min.js"></script>
+    <script src="js/echarts.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-datetimepicker.js"></script>
+    <script src="js/bootstrap-datetimepicker.zh-CN.js"></script>
+</head>
+<body ng-app="myApp">
+    <div ng-view class="{{pageClass}}"></div>
+</body>
+<script>
+    var app = angular.module('myApp',["ngAnimate",'ngRoute']);
+    app.config(function($routeProvider){
+        $routeProvider.when('/login',{
+                    templateUrl:'./login.html',
+                    controller:'login'
+                })
+                .when('/register',{
+                    templateUrl:'./register.html',
+                    controller:'UploaderController'
+                })
+                .when('/login-register',{
+                    templateUrl:'./login-register.html',
+                    controller:'loginRegister'
+                })
+                .when('/manageStaff',{
+                    templateUrl:'./manageStaff.html',
+                    controller:'manageStaff'
+                })
+                .when('/manageStaffEnter',{
+                    templateUrl:'./manageStaffEnter.html',
+                    controller:'manageStaffEnter',
+                })
+                .when('/resetPassword',{
+                    templateUrl:'./resetPassword.html',
+                    controller:'resetPassword'
+                })
+                .when('/resetPasswordSucess',{
+                    templateUrl:'./resetPasswordSucess.html',
+                    controller:'resetPasswordSucess'
+                })
+                .when('/forgetPasswordOne',{
+                    templateUrl:'./forgetPasswordOne.html',
+                    controller:'forgetPasswordOne'
+                })
+                .when('/forgetPasswordTestNum',{
+                    templateUrl:'./forgetPasswordTestNum.html',
+                    controller:'forgetPasswordTestNum'
+                })
+                .when('/payingStaff',{
+                    templateUrl:'./payingStaff.html',
+                    controller:'payingStaff'
+                })
+                // 当没有匹配到路由时 跳转到首页
+                // 两种情况 1.输入错误 2.没有输入
+                .otherwise('/login-register')
+    });
+    //解决ie11缓存
+    app.config(['$httpProvider', function($httpProvider) {
+        //initialize get if not there
+        if (!$httpProvider.defaults.headers.get) {
+            $httpProvider.defaults.headers.get = {};
+        }
+        // Answer edited to include suggestions from comments
+        // because previous version of code introduced browser-related errors
+        //disable IE ajax request caching
+        $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
+        // extra
+        $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
+//        $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
+    }]);
+    /*修改图片预览开始*/
+   /* app.directive('fileModel', ['$parse', function ($parse) {
+                return {
+                    restrict: 'A',
+                    link: function(scope, element, attrs, ngModel) {
+                        var model = $parse(attrs.fileModel);
+                        var modelSetter = model.assign;
+                        element.bind('change', function(event){
+                            scope.$apply(function(){
+                                modelSetter(scope, element[0].files[0]);
+                            });
+                            //附件预览
+                            scope.file = (event.srcElement || event.target).files[0];
+                            scope.getFile();
+                        });
+                    }
+                };
+            }]);*/
+    /*修改图片预览结束*/
+    app.service("appService", [function(){
+    }]);
+    app.controller('loginRegister',['$scope',function ($scope) {
+        $scope.pageClass = 'loginRegister';
+        $scope.srcc="img/web-logo.png";
+    }]);
+    app.controller('payingStaff',function ($scope,appService,$http,$location,locals) {
+        $scope.pageClass = 'payingStaff';
+//        $scope.texa="备注：";
+        $scope.backk=false;
+        $scope.successReturnMoney=false;
+        $scope.backkk=false;
+        $scope.pageN="";
+        $scope.changePass=false;
+        $scope.failure=false
+        $scope.back=false;
+        $scope.uuShow=true;
+        $scope.llShow=false;
+        $scope.newP=false;
+        $scope.certainNewP=false;
+        $scope.changeServiceDate=false;
+        $scope.ali='alia';
+        $scope.errorMessageShow=false;
+        $scope.showSuccess=false;
+        $scope.hideSuccess=function () {
+            $scope.showSuccess=false;
+            $scope.changePass=false;
+        };
+        $scope.closeSuccess=function () {
+            $scope.showSuccess=false;
+            $scope.changePass=false;
+        }
+        $scope.passwordChange=function () {
+            $scope.newPassword="";
+            $scope.certainNewPassword="";
+            $scope.changePass=true;
+            var di=this.$index;
+            if($scope.accountMana[di].avatar){
+                $scope.headIg=$scope.accountMana[di].avatar;
+            }else{
+                $scope.headIg='http://article-img.b0.upaiyun.com/outline/SXgbp2FwIE.jpeg';
+            }
+            $scope.staffAccount=$scope.accountMana[di].account_number;
+            $scope.testNew=function () {
+                if($scope.newPassword){
+                    if($scope.newPassword.length>6||$scope.newPassword.length==6){
+                        $scope.newP=true;
+                        $scope.testCertainNewPassword=function () {
+                            if($scope.certainNewPassword){
+                                if(($scope.certainNewPassword==$scope.newPassword)&&($scope.newPassword.length>6||$scope.newPassword.length==6)){
+                                    $scope.certainNewP=true;
+                                }else{
+                                    $scope.certainNewP=false;
+                                };
+                            };
+                        }
+                    }else{
+                        $scope.newP=false;
+                    };
+                }else{
+                    $scope.newP=false;
+                };
+            };
+            $scope.submitNewPassword=function () {
+                if($scope.newPassword&&$scope.newPassword==$scope.certainNewPassword&&($scope.newPassword.length>6||$scope.newPassword.length==6)){
+                    var accountNumber= $scope.staffAccount;
+                    var password=$scope.newPassword;
+                    changeOldPassword(accountNumber,password);
+                }else if($scope.newPassword&&!$scope.certainNewPassword){
+                    $scope.errorMessageShow=true;
+                    if($scope.newPassword.length>6||$scope.newPassword.length==6){
+                        $scope.errorMessage=["请确认新密码"];
+                    }else{
+                        $scope.errorMessage=["请输入至少6位新密码","请确认新密码"];
+                    }
+                }else if(!$scope.newPassword&&$scope.certainNewPassword){
+                    $scope.errorMessageShow=true;
+                    $scope.errorMessage=["请输入至少6位新密码并确认新密码"];
+                }else if($scope.newPassword&&$scope.certainNewPassword){
+                    $scope.errorMessageShow=true;
+                    if(($scope.newPassword==$scope.certainNewPassword)&&($scope.newPassword.length<6)){
+                        $scope.errorMessage=["请输入至少6位新密码"];
+                    }else if(($scope.newPassword!=$scope.certainNewPassword)&&($scope.newPassword.length>6||$scope.newPassword.length==6)&&($scope.certainNewPassword.length>6||$scope.certainNewPassword.length==6)){
+                        $scope.errorMessage=["输入新密码和确认的新密码应保持一致"];
+                    }else if(($scope.newPassword!=$scope.certainNewPassword)&&($scope.newPassword.length>6||$scope.newPassword.length==6)&&($scope.certainNewPassword.length<6)){
+                        $scope.errorMessage=["输入新密码和确认的新密码应保持一致"];
+                    }else if(($scope.newPassword!=$scope.certainNewPassword)&&($scope.certainNewPassword.length>6||$scope.certainNewPassword.length==6)&&($scope.newPassword.length<6)){
+                    $scope.errorMessage=["请输入至少6位新密码","输入新密码和确认的新密码应保持一致"];
+                    }else if(($scope.newPassword!=$scope.certainNewPassword)&&($scope.newPassword.length<6)&&($scope.certainNewPassword.length<6)){
+                        $scope.errorMessage=["请输入至少6位新密码并确认新密码"];
+                    }
+                }else{
+                    $scope.errorMessageShow=true;
+                    $scope.errorMessage=["请输入至少6位新密码并确认新密码"];
+                }
+            }
+        };
+        $scope.changePasswordClose=function () {
+            $scope.changePass=false;
+            $scope.errorMessageShow=false;
+            $scope.newP=false;
+            $scope.certainNewP=false;
+        }
+        $scope.showAccountManage=function () {
+//            angular.element($("#firstLi")).css({
+//                "opacity": "0"
+//            });
+            $scope.uuShow=false;
+            $scope.llShow=true;
+//            angular.element($("#secondLi")).css({
+//                "transition": "opacity 0.01s",
+//                "-webkit-transition": "opacity 0.01s",
+//                "-moz-transition": "opacity 0.01s",
+//                "-o-transition": "opacity 0.01s",
+//                "-ms-transition": "opacity 0.01s",
+//                "opacity":"1",
+//            });
+        };
+        $scope.showOrderManage=function () {
+//            $scope.llShow=false;
+//            angular.element($("#secondLi")).css({
+//                           "opacity": "0"
+//                  });
+            $scope.llShow=false;
+            $scope.uuShow=true;
+           /* angular.element($("#firstLi")).css({
+                "transition": "opacity 0.01s",
+                "-webkit-transition": "opacity 0.01s",
+                "-moz-transition": "opacity 0.01s",
+                "-o-transition": "opacity 0.01s",
+                "-ms-transition": "opacity 0.01s",
+                "opacity":"1",
+            });*/
+        }
+        $scope.closeReturn=function () {
+            $scope.back=false;
+        };
+        $scope.closeChange=function () {
+            $scope.changeServiceDate=false;
+
+        }
+        var getNamePaying=locals.get("payingBuName");//取公司名称
+        var getCodePaying=locals.get("payingBuCode");//取出公司代码
+        $scope.payingBusinessName=getNamePaying;
+        $scope.payingBusinessCode=getCodePaying;
+        $scope.payingToken=appService.dEnterToken;//token
+        $scope.beforePayingTime=appService.tokenTimeEnter;//过期时间
+        $scope.fPayingTime=appService.freshTimeEnter;//刷新时间
+        var payingNowTime=new Date();//现在时间
+        var payingBeforeTime=new Date(Date.parse($scope.beforePayingTime));//过期时间
+        var payingFreshTime=new Date(Date.parse($scope.fPayingTime));//刷新时间
+
+        /*token处理开始*/
+        if(payingNowTime>payingBeforeTime&&payingNowTime>payingFreshTime){
+            $location.path('/login');
+        }else if(payingNowTime>payingBeforeTime&&payingNowTime<payingFreshTime){
+//                alert(1);
+            /*刷新token开始*/
+            $http({
+                method:'put',
+                url:'https://api.funcgo.com/v1/authorizations/current ',
+                headers: {
+                    'Authorization': 'Bearer ' + appService.dEnterToken
+                },
+                transformRequest: function(obj) {
+                    var str = [];
+                    for(var p in obj)
+                        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                    return str.join("&");
+                },
+            }).then(function  successCallback(response) {
+                var newPayingToken=response.data.data.token;
+                locals.set("tkenEnter",newPayingToken);//存字符串
+                var getPayingToken= locals.get("tkenEnter");
+//                          $scope.ten=getToken;
+                $scope.deleteTokenPaying=function () {
+                    deletePayingToken(getPayingToken);
+                };
+                orderManaging(getPayingToken);
+                $scope.backRetu=function () {
+                    orderManaging(getPayingToken);
+                    $scope.backk=false;
+                };
+                $scope.backReturn=function () {
+                    accountManage(getPayingToken);
+                    $scope.backkk=false;
+                };
+                /*修改服务时间开始*/
+                $scope.ChangeTime=function () {
+                    $scope.changeServiceDate=true;
+                    var indexs=this.$index;
+                    $scope.everyData=$scope.dataArray[indexs];
+                    var idd=$scope.everyData.id;
+                    if($scope.everyData.avatar){
+                        $scope.headImage=$scope.everyData.avatar;
+                    }else{
+                        $scope.headImage='http://article-img.b0.upaiyun.com/outline/SXgbp2FwIE.jpeg';
+                    }
+                    $scope.staffOrder=$scope.everyData.account_number;
+                    $scope.datt=$scope.everyData.service_time;
+                    $scope.certainChangeTime=function () {
+                        var date = new Date(angular.element('.form-control').val());
+                        var time1 = date.getTime()/1000;
+                        changeEndTime(getPayingToken,idd,time1);
+                    }
+                };
+                /*修改服务时间结束*/
+                /*账号管理start*/
+                accountManage(getPayingToken);
+                /*账号管理end*/
+                /*退款开始*/
+                $scope.backMoney=function () {
+                    $scope.successReturnMoney=false;
+                    $scope.mon="";
+                    $scope.texa="";
+                    $scope.failure=false;
+                    $scope.back=true;
+                    var dii=this.$index;
+                    if($scope.dataArray[dii].avatar){
+                        $scope.backHeadImage=$scope.dataArray[dii].avatar;
+                    }else{
+                        $scope.backHeadImage='http://article-img.b0.upaiyun.com/outline/SXgbp2FwIE.jpeg';
+                    };
+                    $scope.backStaffAccount=$scope.dataArray[dii].account_number;
+                    $scope.mon=$scope.dataArray[dii].sale_price;
+                    var isRefund=$scope.dataArray[dii].is_refund;
+                    if(isRefund==1){
+                        $scope.solveMessage="(该员工退过款)";
+                    }else{
+                        $scope.solveMessage="(该员工未退过)";
+                    }
+                    var monAccount;
+                    var tradeNum=$scope.dataArray[dii].trade_no;
+                    var remark;
+                    $scope.txtArea=function () {
+                        remark=$scope.texa;
+                    }
+                    $scope.certainReturnMoney=function () {
+                        monAccount=parseFloat($scope.mon);
+                        if($scope.backStaffAccount&&monAccount&&tradeNum){
+                            backMoney(getPayingToken,tradeNum,$scope.backStaffAccount,monAccount,remark,dii);
+                        }
+                    }
+                };
+                /*退款结束*/
+                /*搜索付费员工开始*/
+                $scope.searchPayingStaff=function () {
+                    var accoun=$scope.staffPaying;
+                    if(accoun){
+                        searching(getPayingToken,accoun);
+                    }
+                }
+                /*搜索付费员工结束*/
+            },function errorCallback(response) {
+
+            })
+            /*刷新token结束*/
+        }else {
+            //locals.set("tken", $scope.dtoken);//存字符串
+            var getTokenPaying= locals.get("tkenEnter");
+            $scope.deleteTokenPaying=function () {
+                deletePayingToken(getTokenPaying);
+            };
+            orderManaging(getTokenPaying);
+            $scope.backRetu=function () {
+//                $scope.dataArray=$scope.dataArray1;
+                orderManaging(getTokenPaying);
+                $scope.backk=false;
+            };
+            $scope.backReturn=function () {
+                accountManage(getTokenPaying);
+                $scope.backkk=false;
+            }
+            /*修改服务时间开始*/
+            $scope.ChangeTime=function () {
+                $scope.changeServiceDate=true;
+                var indexs=this.$index;
+                $scope.everyData=$scope.dataArray[indexs];
+                var idd=$scope.everyData.id;
+                if($scope.everyData.avatar){
+                    $scope.headImage=$scope.everyData.avatar;
+                }else{
+                    $scope.headImage='http://article-img.b0.upaiyun.com/outline/SXgbp2FwIE.jpeg';
+                }
+                $scope.staffOrder=$scope.everyData.account_number;
+                $scope.datt=$scope.everyData.service_time;
+                $scope.certainChangeTime=function () {
+                    /*var date = new Date(angular.element('.form-control').val());
+                    var time1 = date.getTime()/1000;*/
+                    var time1 =angular.element('.form-control').val();
+                    changeEndTime(getTokenPaying,idd,time1);
+                }
+            };
+            /*修改服务时间结束*/
+            /*账号管理start*/
+            accountManage(getTokenPaying);
+            /*账号管理end*/
+            /*退款开始*/
+            $scope.backMoney=function () {
+                $scope.successReturnMoney=false;
+                $scope.mon="";
+                $scope.texa="";
+                $scope.failure=false;
+                $scope.back=true;
+                var dii=this.$index;
+                if($scope.dataArray[dii].avatar){
+                    $scope.backHeadImage=$scope.dataArray[dii].avatar;
+                }else{
+                    $scope.backHeadImage='http://article-img.b0.upaiyun.com/outline/SXgbp2FwIE.jpeg';
+                };
+                $scope.backStaffAccount=$scope.dataArray[dii].account_number;
+                $scope.mon=$scope.dataArray[dii].sale_price;
+                var isRefund=$scope.dataArray[dii].is_refund;
+                if(isRefund==1){
+                    $scope.solveMessage="(该员工退过款)";
+                }else{
+                    $scope.solveMessage="(该员工未退过)";
+                }
+                var monAccount;
+                var tradeNum=$scope.dataArray[dii].trade_no;
+                var remark;
+                $scope.txtArea=function () {
+                    remark=$scope.texa;
+                }
+                $scope.certainReturnMoney=function () {
+                    monAccount=parseFloat($scope.mon);
+                    if($scope.backStaffAccount&&monAccount&&tradeNum){
+                        backMoney(getTokenPaying,tradeNum,$scope.backStaffAccount,monAccount,remark,dii);
+                    }
+                }
+            };
+            /*退款结束*/
+            /*搜索付费员工开始*/
+            $scope.searchPayingStaff=function () {
+                var accoun=$scope.staffPaying;
+                if(accoun){
+                    searching(getTokenPaying,accoun);
+                }
+            }
+            /*搜索付费员工结束*/
+        };
+        /*搜索付费员工封装开始*/
+        function searching(tok,accountNumber) {
+            if(tok) {
+                $http({
+                    method: "get",
+                    url: "https://api.funcgo.com/v1/orders/search"+"?account_number="+accountNumber,
+                    headers: {
+                        'Authorization': "Bearer" + tok
+                    }
+                }).then(function successCallback(response) {
+                    if(response.status==200) {
+                        $scope.backk=true;
+                        $scope.backkk=true;
+                        $scope.dataArray = response.data.orders;
+                        $scope.accountMana=response.data.accounts;
+                        /*搜索账号管理分页开始*/
+                        var perNumPage=13;
+                        var pNumPage=Math.ceil(response.data.accounts.length/perNumPage);
+                        var widthdth=(pNumPage*29)+"px";
+                        $scope.totalPageNum=pNumPage;
+                        if(pNumPage==0){
+                            $scope.pageShowN=false;
+                        }else {
+                            if(pNumPage>8){
+                                angular.element($('#accountSet')).css("width","234px");
+                                angular.element($('.st')).css("width","234px");
+                                angular.element($('.tstt')).css("position","absolute");
+                                angular.element($('.tstt')).css("width","900%");
+                                angular.element($('.tstt')).css("left","1px");
+                                angular.element($('.tstt')).css("top","0px");
+                            }else{
+                                angular.element($('#accountSet')).css("width",widthdth);
+                                angular.element($('.st')).css("width",widthdth);
+                                angular.element($('.tstt')).css("position","static");
+                                angular.element($('.tstt')).css("width",widthdth);
+                                angular.element($('.tstt')).css("left","1px");
+                                angular.element($('.tstt')).css("top","1px");
+                            }
+                            $scope.pageShowN= true;
+                            $scope.curr=false;
+                            $scope.currentPageNum = 0;                       //设置当前页是 0
+                            var RightWi=0;
+                            $scope.setPageNum = function (num) {             // 当点击页码数字时执行的函数
+                                var currentRightPre=angular.element($(".tstt")).css("left");
+                                var currentRightPreLength=currentRightPre.length;
+                                var currentRightNPre=Number(currentRightPre.slice(1,currentRightPreLength-2));
+                                $scope.nowRightPre=currentRightNPre;
+                                $scope.currentPageNum = num;                 //将当前页 设置为 页码数
+                                if ($scope.currentPageNum == pNumPage - 1) {
+                                    $scope.accountMana = response.data.accounts.slice(13 * $scope.currentPageNum);
+                                } else if ($scope.currentPageNum < pNumPage - 1) {
+                                    $scope.accountMana = response.data.accounts.slice(13 * $scope.currentPageNum, 13 * ($scope.currentPageNum + 1));
+                                };
+                            };
+                            $scope.certainJumpPage=function () {
+                                $scope.currentPageNum=$scope.pageNum-1;
+                                if((pNumPage-7)>$scope.pageNum||(pNumPage-7)==$scope.pageNum){
+                                    var disPage = "-" + ($scope.currentPageNum*29) + "px";
+                                    angular.element($(".tstt")).css("left", disPage)
+                                }else{
+                                    var distPage = "-" + ((pNumPage-8)*29) + "px";
+                                    angular.element($(".tstt")).css("left", distPage)
+                                };
+                                if ($scope.currentPageNum == pNumPage - 1) {
+                                    $scope.accountMana = response.data.accounts.slice(13 * $scope.currentPageNum);
+                                } else if ($scope.currentPageNum < pNumPage - 1) {
+                                    $scope.accountMana = response.data.accounts.slice(13 * $scope.currentPageNum, 13 * ($scope.currentPageNum + 1));
+                                };
+                                $scope.pageNum="";
+                            };
+                            $scope.prevPageNum = function () {               //点击上一页执行的函数
+                                var currentRightPre=angular.element($(".tstt")).css("left");
+                                var currentRightPreLength=currentRightPre.length;
+                                var currentRightNPre=Number(currentRightPre.slice(1,currentRightPreLength-2));
+                                $scope.nowRightPre=currentRightNPre;
+                                if($scope.nowRightPre>0) {
+                                    $scope.nowRightPre=$scope.nowRightPre-29;
+                                    var nowRightPre = $scope.nowRightPre;
+                                    if(nowRightPre==0){
+                                        clickNum=0;
+                                        RightWi=0;
+                                    }
+                                    var distanceL = "-" + nowRightPre+ "px";
+                                    angular.element($(".tstt")).css("left", distanceL)
+                                }
+
+                                if ($scope.currentPageNum  > 0) {
+                                    $scope.currentPageNum --;
+                                };
+                                $scope.accountMana= response.data.accounts.slice(13 * $scope.currentPageNum , 13 * ($scope.currentPageNum  + 1));
+                            };
+                            $scope.nextPageNum = function () {              //点击下一页执行的函数
+                                var currentRightPre=angular.element($(".tstt")).css("left");
+                                var currentRightPreLength=currentRightPre.length;
+                                var currentRightNPre=Number(currentRightPre.slice(1,currentRightPreLength-2));
+                                $scope.nowRightPre=currentRightNPre;
+                                RightWi=$scope.nowRightPre;
+                                RightWi=RightWi+29;
+                                var testValueRight=(pNumPage-8)*29;
+                                if(RightWi>testValueRight||RightWi==testValueRight){
+                                    RightWi=testValueRight;
+                                };
+                                $scope.RightWi=RightWi;
+                                var distanceRight="-"+RightWi+"px";
+                                angular.element($(".tstt")).css("left",distanceRight);
+//                                $scope.currentPage=clickNum;
+                                if ($scope.currentPageNum < pNumPage - 1) {
+                                    $scope.currentPageNum++;
+                                } else {
+                                    $scope.currentPageNum = pNumPage - 1;
+                                };
+                                $scope.acNum=$scope.currentPageNum ;
+                                if ($scope.currentPageNum  == pNumPage - 1) {
+                                    $scope.accountMana= response.data.accounts.slice(13 * $scope.currentPageNum );
+                                } else if ($scope.currentPageNum  <pNumPage- 1) {
+                                    $scope.accountMana = response.data.accounts.slice(13 * $scope.currentPageNum , 13 * ( $scope.currentPageNum  + 1));
+                                }
+                            };
+                            var arr1 = [];
+                            for (var i = 0; i < pNumPage; i++) {
+                                arr1.push(i);
+                            };
+                            $scope.amountt = arr1;
+                            $scope.accountMana = response.data.accounts.slice(13 * $scope.currentPageNum, 13 * ( $scope.currentPageNum + 1));
+                        }
+                        /*搜索账号管理分页结束*/
+                        /*搜索订单管理分页开始*/
+                        var acc = 1;
+                        var perNum = 13;
+                        //                                $scope.length=response.data.data.length;
+                        pNum = Math.ceil(response.data.orders.length / perNum);
+                        var widthd=(pNum*29)+"px";
+                        $scope.totalPageNumber = pNum;
+                        if (pNum == 0) {
+                            $scope.pageShow = false;
+                        } else {
+                            if(pNum<8||pNum==8){
+                                angular.element($('#orderSet')).css("width",widthd);
+                                angular.element($('.st')).css("width",widthd);
+                                angular.element($('.stt')).css("position","static");
+                                angular.element($('.stt')).css("width",widthd);
+                                angular.element($('.stt')).css("left","1px");
+                                angular.element($('.stt')).css("top","1px");
+                            }else {
+                                angular.element($('#orderSet')).css("width","234px");
+                                angular.element($('.st')).css("width","234px");
+                                angular.element($('.stt')).css("position","absolute");
+                                angular.element($('.stt')).css("width","900%");
+                                angular.element($('.stt')).css("left","1px");
+                                angular.element($('.stt')).css("top","0px");
+                            }
+                            $scope.pageShow = true;
+                            $scope.curr = false;
+                            $scope.newArr = arr;
+                            $scope.currentPage = 0;                       //设置当前页是 0
+                            $scope.certainJump = function () {
+                                $scope.currentPage = $scope.pageN - 1;
+                                if ((pNum - 7) > $scope.pageN || (pNum - 7) == $scope.pageN) {
+                                    var dis = "-" + ($scope.currentPage * 29) + "px";
+                                    angular.element($(".stt")).css("left", dis)
+                                } else {
+                                    var dist = "-" + ((pNum - 8) * 29) + "px";
+                                    angular.element($(".stt")).css("left", dist)
+                                }
+                                ;
+                                if ($scope.currentPage == pNum - 1) {
+                                    $scope.dataArray = response.data.orders.slice(13 * $scope.currentPage);
+                                } else if ($scope.currentPage < pNum - 1) {
+                                    $scope.dataArray = response.data.orders.slice(13 * $scope.currentPage, 13 * ($scope.currentPage + 1));
+                                };
+                                $scope.pageN="";
+                            };
+                            $scope.setPage = function (num) {             // 当点击页码数字时执行的函数
+                                $scope.curr = true;
+                                var currentLeft = angular.element($(".stt")).css("left");
+                                var currentLeftLength = currentLeft.length;
+                                var currentLeftN = Number(currentLeft.slice(1, currentLeftLength - 2));
+                                $scope.nowLeft = currentLeftN;
+                                $scope.currentPage = num;                 //将当前页 设置为 页码数
+                                if ($scope.currentPage == pNum - 1) {
+                                    $scope.dataArray = response.data.orders.slice(13 * $scope.currentPage);
+                                } else if ($scope.currentPage < pNum - 1) {
+                                    $scope.dataArray = response.data.orders.slice(13 * $scope.currentPage, 13 * ($scope.currentPage + 1));
+                                }
+                                ;
+                                $scope.acNum = $scope.currentPage;
+                            };
+                            var arr = [];
+                            for (var i = 0; i < pNum; i++) {
+                                arr.push(i);
+                            }
+                            ;
+                            $scope.amount = arr;
+                            var clickNum = 0;
+                            var leftWi = 0;
+//                          $scope.acNum=0;
+                            $scope.prevPage = function () {               //点击上一页执行的函数
+                                var currentLeftP = angular.element($(".stt")).css("left");
+                                var currentLeftPLength = currentLeftP.length;
+                                var currentLeftNP = Number(currentLeftP.slice(1, currentLeftPLength - 2));
+                                $scope.nowLeftP = currentLeftNP;
+                                if ($scope.nowLeftP > 0) {
+                                    $scope.nowLeftP = $scope.nowLeftP - 29;
+                                    var leftValue = $scope.nowLeftP;
+                                    if (leftValue == 0) {
+                                        clickNum = 0;
+                                        leftWi = 0;
+                                    }
+                                    var distance = "-" + leftValue + "px";
+                                    angular.element($(".stt")).css("left", distance)
+                                }
+
+                                if ($scope.currentPage > 0) {
+                                    $scope.currentPage--;
+                                }
+                                ;
+                                $scope.dataArray = response.data.orders.slice(13 * $scope.currentPage, 13 * ($scope.currentPage + 1));
+                            };
+                            $scope.nextPage = function () {              //点击下一页执行的函数
+                                clickNum++;
+                                var currentLeftPre = angular.element($(".stt")).css("left");
+                                var currentLeftPreLength = currentLeftPre.length;
+                                var currentLeftNPre = Number(currentLeftPre.slice(1, currentLeftPreLength - 2));
+                                $scope.nowLeftPre = currentLeftNPre;
+                                leftWi = $scope.nowLeftPre;
+                                leftWi = leftWi + 29;
+                                var testValue = (pNum - 8) * 29;
+                                if (leftWi > testValue || leftWi == testValue) {
+                                    leftWi = testValue;
+                                }
+                                ;
+                                $scope.leftW = leftWi;
+                                var distance = "-" + leftWi + "px";
+                                angular.element($(".stt")).css("left", distance);
+//                                $scope.currentPage=clickNum;
+                                if ($scope.currentPage < pNum - 1) {
+                                    $scope.currentPage++;
+                                } else {
+                                    $scope.currentPage = pNum - 1;
+                                }
+                                ;
+                                if (acc < pNum) {
+                                    acc++;
+                                }
+//
+                                $scope.acNum = $scope.currentPage;
+                                if ($scope.currentPage == pNum - 1) {
+                                    $scope.dataArray = response.data.orders.slice(13 * $scope.currentPage);
+                                } else if ($scope.currentPage < pNum - 1) {
+                                    $scope.dataArray = response.data.orders.slice(13 * $scope.currentPage, 13 * ( $scope.currentPage + 1));
+                                }
+                            };
+                            $scope.dataArray = response.data.orders.slice(13 * $scope.currentPage, 13 * ( $scope.currentPage + 1));
+                            /*搜索订单管理分页结束*/
+                        }
+                    }
+                }, function errorCallback(response) {
+
+                })
+            }
+        }
+        /*搜索付费员工封装结束*/
+        /*退款封装开始*/
+        function backMoney(tok,tradeNumber,accountNum,cash,remar,dii) {
+            if(tok){
+                $http({
+                    method:'post',
+                    url:'https://api.funcgo.com/v1/users/refund',
+                    headers: {
+                        'Authorization': 'Bearer ' + tok,
+                    },
+                    data:{
+                        trade_no:tradeNumber,
+                        account_number:accountNum,
+                        money:cash,
+                        remark:remar
+                    }
+                }).then(function  successCallback(response) {
+                    if(response.status==201){
+                        $scope.dataArray[dii].is_refund=1;
+                        $scope.failure=false;
+                        $scope.successReturnMoney=true;
+                        $scope.solveMessage="(该员工退过款)";
+//                        $scope.back=false;
+                    }
+                },function errorCallback(response) {
+                    if(response.status==403){
+                        $scope.failure=true;
+                        $scope.successReturnMoney=false;
+                        $scope.fail=response.data.message;
+//                        $scope.fail="退款失败";
+                    }else if(response.status==422){
+                        $scope.failure=true;
+                        $scope.successReturnMoney=false;
+                        $scope.fail=response.data.errors[0].code;
+                    }
+                })
+            };
+        }
+        /*退款封装结束*/
+        /*修改密码开始*/
+        function changeOldPassword(accountNumber,password) {
+                $http({
+                    method:'post',
+                    url:'https://api.funcgo.com/v1/users/forgetpassword',
+                    data:{
+                        account_number:accountNumber,
+                        password:password
+                    }
+                }).then(function  successCallback(response) {
+                    if(response.status==200){
+                        $scope.showSuccess=true;
+                        $scope.errorMessageShow=false;
+                        $scope.newP=false;
+                        $scope.certainNewP=false;
+                    }
+                },function errorCallback(response) {
+                })
+        }
+        /*修改密码结束*/
+        /*账号管理开始*/
+        function accountManage(tok) {
+            if(tok) {
+                $http({
+                    method: "get",
+                    url: "https://api.funcgo.com/v1/orders/accounts",
+                    headers: {
+                        'Authorization': "Bearer" + tok
+                    }
+                }).then(function successCallback(response) {
+                    $scope.accountMana = response.data.data;
+                    /*分页开始*/
+                    var perNumPage=13;
+                    var pNumPage=Math.ceil(response.data.data.length/perNumPage);
+                    var widthdth=(pNumPage*29)+"px";
+                    $scope.totalPageNum=pNumPage;
+                    if(perNumPage==0){
+                        $scope.pageShowN=false;
+                    }else {
+                        if(pNumPage>8){
+                            angular.element($('#accountSet')).css("width","234px");
+                            angular.element($('.st')).css("width","234px");
+                            angular.element($('.tstt')).css("position","absolute");
+                            angular.element($('.tstt')).css("width","900%");
+                            angular.element($('.tstt')).css("left","1px");
+                            angular.element($('.tstt')).css("top","0px");
+                        }else{
+                            angular.element($('#accountSet')).css("width",widthdth);
+                            angular.element($('.st')).css("width",widthdth);
+                            angular.element($('.tstt')).css("position","static");
+                            angular.element($('.tstt')).css("width",widthdth);
+                            angular.element($('.tstt')).css("left","1px");
+                            angular.element($('.tstt')).css("top","1px");
+                        }
+                        $scope.pageShowN= true;
+                        $scope.curr=false;
+                        $scope.currentPageNum = 0;                       //设置当前页是 0
+                        var RightWi=0;
+                        $scope.setPageNum = function (num) {             // 当点击页码数字时执行的函数
+                            var currentRightPre=angular.element($(".tstt")).css("left");
+                            var currentRightPreLength=currentRightPre.length;
+                            var currentRightNPre=Number(currentRightPre.slice(1,currentRightPreLength-2));
+                            $scope.nowRightPre=currentRightNPre;
+                            $scope.currentPageNum = num;                 //将当前页 设置为 页码数
+                            if ($scope.currentPageNum == pNumPage - 1) {
+                                $scope.accountMana = response.data.data.slice(13 * $scope.currentPageNum);
+                            } else if ($scope.currentPageNum < pNumPage - 1) {
+                                $scope.accountMana = response.data.data.slice(13 * $scope.currentPageNum, 13 * ($scope.currentPageNum + 1));
+                            };
+//                            $scope.acNum=$scope.currentPage;
+                        };
+                        $scope.certainJumpPage=function () {
+                            $scope.currentPageNum=$scope.pageNum-1;
+                            if((pNumPage-7)>$scope.pageNum||(pNumPage-7)==$scope.pageNum){
+                                var disPage = "-" + ($scope.currentPageNum*29) + "px";
+                                angular.element($(".tstt")).css("left", disPage)
+                            }else{
+                                var distPage = "-" + ((pNumPage-8)*29) + "px";
+                                angular.element($(".tstt")).css("left", distPage)
+                            };
+                            if ($scope.currentPageNum == pNumPage - 1) {
+                                $scope.accountMana = response.data.data.slice(13 * $scope.currentPageNum);
+                            } else if ($scope.currentPageNum < pNumPage - 1) {
+                                $scope.accountMana = response.data.data.slice(13 * $scope.currentPageNum, 13 * ($scope.currentPageNum + 1));
+                            };
+                            $scope.pageNum="";
+                        };
+                        $scope.prevPageNum = function () {               //点击上一页执行的函数
+                            var currentRightPre=angular.element($(".tstt")).css("left");
+                            var currentRightPreLength=currentRightPre.length;
+                            var currentRightNPre=Number(currentRightPre.slice(1,currentRightPreLength-2));
+                            $scope.nowRightPre=currentRightNPre;
+                            if($scope.nowRightPre>0) {
+                                $scope.nowRightPre=$scope.nowRightPre-29;
+                                var nowRightPre = $scope.nowRightPre;
+                                if(nowRightPre==0){
+                                    clickNum=0;
+                                    RightWi=0;
+                                }
+                                var distanceL = "-" + nowRightPre+ "px";
+                                angular.element($(".tstt")).css("left", distanceL)
+                            }
+
+                            if ($scope.currentPageNum  > 0) {
+                                $scope.currentPageNum --;
+                            };
+                            $scope.accountMana= response.data.data.slice(13 * $scope.currentPageNum , 13 * ($scope.currentPageNum  + 1));
+                        };
+                        $scope.nextPageNum = function () {              //点击下一页执行的函数
+                            var currentRightPre=angular.element($(".tstt")).css("left");
+                            var currentRightPreLength=currentRightPre.length;
+                            var currentRightNPre=Number(currentRightPre.slice(1,currentRightPreLength-2));
+                            $scope.nowRightPre=currentRightNPre;
+                            RightWi=$scope.nowRightPre;
+                            RightWi=RightWi+29;
+                            var testValueRight=(pNumPage-8)*29;
+                            if(RightWi>testValueRight||RightWi==testValueRight){
+                                RightWi=testValueRight;
+                            };
+                            $scope.RightWi=RightWi;
+                            var distanceRight="-"+RightWi+"px";
+                            angular.element($(".tstt")).css("left",distanceRight);
+//                                $scope.currentPage=clickNum;
+                            if ($scope.currentPageNum < pNumPage - 1) {
+                                $scope.currentPageNum++;
+                            } else {
+                                $scope.currentPageNum = pNumPage - 1;
+                            };
+                            $scope.acNum=$scope.currentPageNum ;
+                            if ($scope.currentPageNum  == pNumPage - 1) {
+                                $scope.accountMana= response.data.data.slice(13 * $scope.currentPageNum );
+                            } else if ($scope.currentPageNum  <pNumPage- 1) {
+                                $scope.accountMana = response.data.data.slice(13 * $scope.currentPageNum , 13 * ( $scope.currentPageNum  + 1));
+                            }
+                        };
+                        var arr1 = [];
+                        for (var i = 0; i < pNumPage; i++) {
+                            arr1.push(i);
+                        };
+                        $scope.amountt = arr1;
+                        $scope.accountMana = response.data.data.slice(13 * $scope.currentPageNum, 13 * ( $scope.currentPageNum + 1));
+                    }
+                    /*分页结束*/
+
+                }, function errorCallback(response) {
+
+                })
+            }
+        }
+        /*账号管理结束*/
+        /*封装修改截止时间开始*/
+        function changeEndTime(tok,idd,serviceTime) {
+            if(tok){
+                $http({
+                    method:'post',
+                    url:'https://api.funcgo.com/v1/orders/service_time',
+                    headers: {
+                        'Authorization': 'Bearer ' + tok,
+                    },
+                    data:{
+                        id:idd,
+                        service_time:serviceTime,
+                    }
+                }).then(function  successCallback(response) {
+                    if(response.status==201){
+                        $scope.changeServiceDate=false;
+                    }
+                },function errorCallback(response) {
+                })
+            };
+        }
+        /*封装修改截止时间结束*/
+        /*订单管理开始*/
+        function orderManaging(tok) {
+            if(tok){
+                $http({
+                    method:'get',
+                    url:'https://api.funcgo.com/v1/orders',
+                    headers: {
+                        'Authorization': 'Bearer ' + tok,
+                    },
+                    transformRequest: function(obj) {
+                        var str = [];
+                        for(var p in obj)
+                            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                        return str.join("&");
+                    },
+                }).then(function  successCallback(response) {
+                        $scope.dataArray=response.data.data;
+                        $scope.dataArray1=response.data.data;
+                        /*分页开始*/
+                        var acc=1;
+                        var perNum=13;
+    //                                $scope.length=response.data.data.length;
+                        pNum=Math.ceil(response.data.data.length/perNum);
+                        var widthd=(pNum*29)+"px";
+                        $scope.totalPageNumber=pNum;
+                        if(pNum==0){
+                            $scope.pageShow=false;
+                        }else {
+                           if(pNum>8){
+                                angular.element($('#orderSet')).css("width","234px");
+                                angular.element($('.st')).css("width","234px");
+                                angular.element($('.stt')).css("position","absolute");
+                                angular.element($('.stt')).css("width","900%");
+                                angular.element($('.stt')).css("left","1px");
+                                angular.element($('.stt')).css("top","0px");
+                            }else{
+                               angular.element($('#orderSet')).css("width",widthd);
+                               angular.element($('.st')).css("width",widthd);
+                               angular.element($('.stt')).css("position","static");
+                               angular.element($('.stt')).css("width",widthd);
+                               angular.element($('.stt')).css("left","1px");
+                               angular.element($('.stt')).css("top","1px");
+                           }
+                            $scope.pageShow = true;
+                            $scope.curr=false;
+                            $scope.newArr = arr;
+                            $scope.currentPage = 0;                       //设置当前页是 0
+                            $scope.certainJump=function () {
+                                $scope.currentPage=$scope.pageN-1;
+                                if((pNum-7)>$scope.pageN||(pNum-7)==$scope.pageN){
+                                    var dis = "-" + ($scope.currentPage*29) + "px";
+                                    angular.element($(".stt")).css("left", dis)
+                                }else{
+                                    var dist = "-" + ((pNum-8)*29) + "px";
+                                    angular.element($(".stt")).css("left", dist)
+                                };
+                                if ($scope.currentPage == pNum - 1) {
+                                    $scope.dataArray = response.data.data.slice(13 * $scope.currentPage);
+                                } else if ($scope.currentPage < pNum - 1) {
+                                    $scope.dataArray = response.data.data.slice(13 * $scope.currentPage, 13 * ($scope.currentPage + 1));
+                                };
+                                $scope.pageN="";
+                            };
+                            $scope.setPage = function (num) {             // 当点击页码数字时执行的函数
+                                $scope.curr=true;
+                                var currentLeft=angular.element($(".stt")).css("left");
+                                var currentLeftLength=currentLeft.length;
+                                var currentLeftN=Number(currentLeft.slice(1,currentLeftLength-2));
+                                $scope.nowLeft=currentLeftN;
+                                $scope.currentPage = num;                 //将当前页 设置为 页码数
+                                if ($scope.currentPage == pNum - 1) {
+                                    $scope.dataArray = response.data.data.slice(13 * $scope.currentPage);
+                                } else if ($scope.currentPage < pNum - 1) {
+                                    $scope.dataArray = response.data.data.slice(13 * $scope.currentPage, 13 * ($scope.currentPage + 1));
+                                };
+                                $scope.acNum=$scope.currentPage;
+                            };
+                            var arr = [];
+                            for (var i = 0; i < pNum; i++) {
+                                arr.push(i);
+                            }
+                            ;
+                            $scope.amount = arr;
+                            var clickNum=0;
+                            var leftWi=0;
+//                          $scope.acNum=0;
+                            $scope.prevPage = function () {               //点击上一页执行的函数
+                                var currentLeftP=angular.element($(".stt")).css("left");
+                                var currentLeftPLength=currentLeftP.length;
+                                var currentLeftNP=Number(currentLeftP.slice(1,currentLeftPLength-2));
+                                $scope.nowLeftP=currentLeftNP;
+                                if($scope.nowLeftP>0) {
+                                    $scope.nowLeftP=$scope.nowLeftP-29;
+                                    var leftValue = $scope.nowLeftP;
+                                    if(leftValue==0){
+                                        clickNum=0;
+                                        leftWi=0;
+                                    }
+                                    var distance = "-" + leftValue + "px";
+                                    angular.element($(".stt")).css("left", distance)
+                                }
+
+                                if ($scope.currentPage > 0) {
+                                    $scope.currentPage--;
+                                };
+                                $scope.dataArray = response.data.data.slice(13 * $scope.currentPage, 13 * ($scope.currentPage + 1));
+                            };
+                            $scope.nextPage = function () {              //点击下一页执行的函数
+                                clickNum++;
+                                var currentLeftPre=angular.element($(".stt")).css("left");
+                                var currentLeftPreLength=currentLeftPre.length;
+                                var currentLeftNPre=Number(currentLeftPre.slice(1,currentLeftPreLength-2));
+                                $scope.nowLeftPre=currentLeftNPre;
+                                leftWi=$scope.nowLeftPre;
+                                leftWi=leftWi+29;
+                                var testValue=(pNum-8)*29;
+                                if(leftWi>testValue||leftWi==testValue){
+                                    leftWi=testValue;
+                                };
+                                $scope.leftW=leftWi;
+                                var distance="-"+leftWi+"px";
+                                angular.element($(".stt")).css("left",distance);
+//                                $scope.currentPage=clickNum;
+                                if ($scope.currentPage < pNum - 1) {
+                                    $scope.currentPage++;
+                                } else {
+                                    $scope.currentPage = pNum - 1;
+                                }
+                                ;
+                                if (acc < pNum) {
+                                    acc++;
+                                }
+                                $scope.acNum=$scope.currentPage;
+                                if ($scope.currentPage == pNum - 1) {
+                                    $scope.dataArray = response.data.data.slice(13 * $scope.currentPage);
+                                } else if ($scope.currentPage < pNum - 1) {
+                                    $scope.dataArray = response.data.data.slice(13 * $scope.currentPage, 13 * ( $scope.currentPage + 1));
+                                }
+                            };
+                            $scope.dataArray = response.data.data.slice(13 * $scope.currentPage, 13 * ( $scope.currentPage + 1));
+                            /*分页结束*/
+                        }
+                },function errorCallback(response) {
+                })
+            };
+        }
+        /*订单管理结束*/
+        /*删除token开始*/
+        function deletePayingToken(tok) {
+            if(tok){
+                $http({
+                    method:'delete',
+                    url:'https://api.funcgo.com/v1/authorizations/current',
+                    headers: {
+                        'Authorization': 'Bearer ' + tok,
+                    },
+                    transformRequest: function(obj) {
+                        var str = [];
+                        for(var p in obj)
+                            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                        return str.join("&");
+                    },
+                }).then(function  successCallback(response) {
+                    //                     alert(1);
+                    if(response.status==204){
+                        $location.path('/login');
+                    }
+                },function errorCallback(response) {
+                })
+            }else {
+                $location.path('/login');
+            }
+        }
+        /*删除token结束*/
+    });
+
+    app.controller('forgetPasswordOne',function ($scope,$http,$location,appService) {
+//             $scope.forgetTelephonere='1111111';
+//             $scope.forgetBusinessName='1111111';
+        $scope.pageClass = 'forgetPasswordOne';
+        $scope.mes=true;
+             $scope.getAfterTestNum=function () {
+                 if ($scope.forgetTelephone&&$scope.forgetBusinessName&&($scope.forgetTelephone.length==11)) {
+                     appService.tell= $scope.forgetTelephone;
+//                     alert(1);company_name
+                     $http({
+                         method:'get',
+                         url:encodeURI('https://api.funcgo.com/v1/enterprise/verify?company_phone='+$scope.forgetTelephone+'&company_name='+$scope.forgetBusinessName),
+                     }).then(function  successCallback(response) {
+                         if(response.status==200){
+                             $scope.mes=false;
+                             var arr01=[];
+                             var obj01={};
+                             obj01.code=response.data.message;
+                             arr01.push(obj01);
+                             $scope.messa=arr01;
+                             $scope.nextOne=function () {
+                                 $location.path('/forgetPasswordTestNum');
+                             };
+                         }
+                     },function errorCallback(response) {
+                         $scope.mes=false;
+                         if(response.status==422){
+                             $scope.messa=response.data.errors;
+                         }
+                     })
+                 }else if(!$scope.forgetTelephone&&$scope.forgetBusinessName){
+                        $scope.mes=false;
+                        var arr02=[{code:"company phone手机号码不能为空"}];
+                        $scope.messa=arr02;
+                 }else if($scope.forgetTelephone&&!$scope.forgetBusinessName){
+                        $scope.mes=false;
+                        if($scope.forgetTelephone.length==11){
+                            var arr03=[{code:"company name公司名称不能为空"}];
+                        }else{
+                            var arr03=[
+                                {code:"company phone手机号码无效"},
+                                {code:"company name公司名称不能为空"}
+                            ];
+                        }
+                        $scope.messa=arr03;
+                 }else if(!$scope.forgetTelephone&&!$scope.forgetBusinessName){
+                        $scope.mes=false;
+                         var arr04=[
+                                    {code:"company phone手机号码不能为空"},
+                                    {code:"company name公司名称不能为空"}
+                            ];
+                         $scope.messa=arr04;
+                 }else if($scope.forgetTelephone&&$scope.forgetBusinessName&&($scope.forgetTelephone.length!=11)){
+                     $scope.mes=false;
+                     var arr05=[
+                         {code:"company phone手机号码无效"}
+                     ];
+                     $scope.messa=arr05;
+                 };;
+             };
+         });
+    app.controller('forgetPasswordTestNum',function ($scope,$http,$location,appService,$interval) {
+        $scope.pageClass = 'forgetPasswordTestNum';
+        $scope.testShow=false;
+//        $scope.return=function () {
+//            $location.path('/forgetPasswordOne');
+//        }
+        /*60s倒计时开始*/
+        $scope.paracont = "60S";
+        $scope.paraeventt=true;
+        var secondd = 60;
+        var timePromisee = undefined;
+        timePromisee = $interval(function(){
+            if(secondd<=0){
+                $interval.cancel(timePromisee);
+                timePromisee = undefined;
+                secondd = 60;
+                $scope.paracont = "";
+                $scope.paraclass = "but_null";
+                $scope.paraeventt=false;
+                $scope.return=function () {
+                    $location.path('/forgetPasswordOne');
+                }
+            }else{
+                $scope.return=function () {
+                   return false;
+                }
+                $scope.paracont = secondd + "S";
+                $scope.paraclass = "not but_null";
+                secondd--;
+            }
+        },1000,100);
+        /*60s倒计时结束*/
+        $scope.transTel=appService.tell;
+        $scope.nextSecond=function () {
+            if ($scope.transTel&&$scope.testN) {
+                $http({
+                    method:'post',
+                    url:'https://api.funcgo.com/v1/enterprise/verify_code',
+                    data:{
+                        company_phone:$scope.transTel,
+                        verify_code:$scope.testN
+                    }
+                }).then(function  successCallback(response) {
+                    $location.path('/resetPassword');
+                },function errorCallback(response) {
+                    if(response.status==422){
+                        $scope.testShow=true;
+                        $scope.mesTest=response.data.errors[0].code;
+                    }
+                })
+            }else if(!$scope.testN){
+                $scope.testShow=true;
+                $scope.mesTest="验证码不能为空";
+            };
+        }
+    });
+    app.controller('resetPassword',function ($scope,$http,$location,appService) {
+        $scope.pageClass = 'resetPassword';
+        $scope.transTelll=appService.tell;
+        $scope.littleOn=true;
+        $scope.littleTw=true;
+        $scope.changeText=function () {
+            if($scope.newPassword.length>5){
+                $scope.littleOn=false;
+                if($scope.newPassword===$scope.repeatNewPassword){
+                    $scope.littleTw=false;
+                }else{
+                    $scope.littleTw=true;
+                }
+            }else{
+                $scope.littleOn=true;
+                $scope.littleTw=true;
+            }
+        };
+        $scope.same=function () {
+            if($scope.newPassword===$scope.repeatNewPassword&&$scope.newPassword.length>5){
+                $scope.littleTw=false;
+                $scope.littleOn=false;
+            }else {
+                $scope.littleTw=true;
+            }
+        }
+        $scope.certainn=function () {
+            if ($scope.newPassword&&$scope.repeatNewPassword&&$scope.newPassword===$scope.repeatNewPassword&&$scope.newPassword.length>5) {
+                $http({
+                    method:'post',
+                    url:'https://api.funcgo.com/v1/enterprise/forgetpassword',
+                    data:{
+                        account_number:$scope.transTelll,
+                        password:$scope.newPassword
+                    }
+                }).then(function  successCallback(response) {
+                    $location.path('/resetPasswordSucess');
+                },function errorCallback(response) {
+                })
+            }else if($scope.newPassword&&$scope.repeatNewPassword&&$scope.newPassword!=$scope.repeatNewPassword&&$scope.newPassword.length>5&&$scope.repeatNewPassword.length>5){
+                $scope.newPass=[{code:"密码不一致"}];
+            }else if($scope.newPassword&&$scope.repeatNewPassword&&$scope.newPassword&&$scope.repeatNewPassword&&$scope.newPassword===$scope.repeatNewPassword&&$scope.newPassword.length<6){
+                $scope.newPass=[{code:"新密码最少6位数"}];
+            }else if($scope.newPassword&&$scope.repeatNewPassword&&$scope.newPassword!=$scope.repeatNewPassword&&$scope.newPassword.length<6&&$scope.repeatNewPassword.length>5){
+                $scope.newPass=[
+                    {code:"密码不一致"},
+                    {code:"新密码最少6位数"}
+                ];
+            }else if($scope.newPassword&&$scope.repeatNewPassword&&$scope.newPassword!=$scope.repeatNewPassword&&$scope.newPassword.length>5&&$scope.repeatNewPassword.length<6){
+                $scope.newPass=[{code:"密码不一致"}];
+            }else if($scope.newPassword&&$scope.repeatNewPassword&&$scope.newPassword!=$scope.repeatNewPassword&&$scope.newPassword.length<6&&$scope.repeatNewPassword.length<6){
+                $scope.newPass=[
+                    {code:"密码不一致"},
+                    {code:"新密码最少6位数"},
+                ];
+            }else if(!$scope.newPassword&&$scope.repeatNewPassword){
+                $scope.newPass=[{code:"请输入新密码"}];
+            }else if ($scope.newPassword&&!$scope.repeatNewPassword&&$scope.newPassword.length<6){
+                $scope.newPass=[
+                    {code:"新密码最少6位数"},
+                    {code:"请确认新密码"}
+                ];
+            }else if($scope.newPassword&&!$scope.repeatNewPassword&&$scope.newPassword.length>5){
+                $scope.newPass=[{code:"请确认新密码"}];
+            }else if(!$scope.newPassword&&!$scope.repeatNewPassword){
+                $scope.newPass=[{code:"请输入并确认新密码"}];
+            };
+        }
+//        $scope.newPass=[{code:"请确认新密码"}];
+//        {code:"新密码最少6位数"}
+    });
+    app.controller('resetPasswordSucess',function ($scope,$http,$location,appService) {
+        $scope.pageClass = 'resetPasswordSucess';
+        $scope.repeatLogin=function () {
+            $location.path('/login');
+        }
+    });
+
+    app.controller('manageStaff',function ($scope,appService,$http,$location,$window,locals) {
+             $scope.ten;
+        $scope.pageClass = 'man';
+        $scope.color=true;
+        /*3-29修改开始*/
+//             $scope.im="img/completedPic.png";
+        /*3-29修改结束*/
+            if(appService.isAllowe==0){
+                appService.dtoken==appService.dEnterToken;
+//                appService.tokenEnterTime=response.data.data.token.expired_at;
+//                appService.freshTimeEnter=response.data.data.token.refresh_expired_at;
+                appService.tokenTime=appService.tokenTimeEnter//过期时间；
+                appService.freshTime=appService.freshTimeEnter//刷新时间
+                locals.set("tken", appService.dEnterToken);//存字符串
+            }
+//             $scope.businessNam=appService.bName;
+//             $scope.businessCode=appService.bCode;
+             $scope.dtoken=appService.dtoken;//token
+             $scope.tim=appService.tokenTime;//过期时间
+             $scope.fTime=appService.freshTime;//刷新时间
+             var timee=new Date();//现在时间
+             var ti=new Date(Date.parse($scope.tim));//过期时间
+             var tfresh=new Date(Date.parse($scope.fTime));//刷新时间
+//             locals.set("tken", $scope.dtoken);//存字符串
+             /*修改开始*/
+//             var getToken= locals.get("tken");
+//             meth(getToken);
+//             $scope.deleteToken=function () {
+//                 deleteTo(getToken);
+//             }
+             /*修改结束*/
+             if(timee>$scope.fTime&&timee>$scope.tim){
+                 $location.path('/login-register');
+             }else if(timee>ti&&timee<tfresh){
+//                alert(1);
+                 /*刷新token开始*/
+                 $http({
+                     method:'put',
+                     url:'https://api.funcgo.com/v1/authorizations/current ',
+                     headers: {
+                         'Authorization': 'Bearer ' + appService.dtoken
+                     },
+                     transformRequest: function(obj) {
+                         var str = [];
+                         for(var p in obj)
+                             str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                         return str.join("&");
+                     },
+                 }).then(function  successCallback(response) {
+                        var newToken=response.data.data.token;
+                        locals.set("tken",newToken);//存字符串
+                        getToken= locals.get("tken");
+                        $scope.ten=getToken;
+                        meth(getToken);
+                        $scope.deleteToken=function () {
+                            deleteTo(getToken);
+                        }
+                 },function errorCallback(response) {
+
+                 })
+                 /*刷新token结束*/
+             }else {
+                 var getToken= locals.get("tken");
+                 meth(getToken);
+                 $scope.deleteToken=function () {
+                     deleteTo(getToken);
+                 }
+             }
+             /*开始*/
+             function meth(token) {
+                 $http({
+                     method:'get',
+                     url:'https://api.funcgo.com/v1/enterprise/status',
+                     headers: {
+                         'Authorization': 'Bearer ' + token,
+                     },
+                     transformRequest: function(obj) {
+                         var str = [];
+                         for(var p in obj)
+                             str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                         return str.join("&");
+                     },
+                 }).then(function  successCallback(response) {
+                     $scope.businessNam=response.data.data.company_name;
+                     $scope.businessCode=response.data.data.company_code;
+                     /*3-29修改开始*/
+                     /*if(response.data.data.is_allow==1){
+                         $scope.color=false;
+                         $scope.im="img/complete.png";
+                     }*/
+                     /*3-29修改结束*/
+                 },function errorCallback(response) {
+                 })
+             }
+             /*结束*/
+             function deleteTo(tok) {
+                     if(tok){
+                         $http({
+                             method:'delete',
+                             url:'https://api.funcgo.com/v1/authorizations/current',
+                             headers: {
+                                 'Authorization': 'Bearer ' + tok,
+                             },
+                             transformRequest: function(obj) {
+                                 var str = [];
+                                 for(var p in obj)
+                                     str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                                 return str.join("&");
+                             },
+                         }).then(function  successCallback(response) {
+                             //                     alert(1);
+                             if(response.status==204){
+                                 $location.path('/login');
+                             }
+                         },function errorCallback(response) {
+                         })
+                     }else {
+                         $location.path('/login');
+                     }
+             }
+         })
+         app.controller('UploaderController', function($scope,fileReader,$http,$location,appService,$interval,locals){
+             $scope.pageClass = 'reg';
+             $scope.all=false;
+             $scope.littleOne=true;
+             $scope.littleTwo=true;
+             $scope.littleThree=true;
+             $scope.littleFour=true;
+             $scope.mage="上传营业执照";
+             $scope.alAd=true;
+             $scope.alBu=true;
+             $scope.alTel=true;
+             $scope.alPe=true;
+             $scope.alTe=true;
+             $scope.extra=false;
+             $scope.testN=function () {
+                 $scope.alTe=true;
+             }
+             $scope.close=function () {
+                 $scope.myShow = !$scope.myShow;
+             }
+             $scope.testBusinessName=function () {
+                 $scope.alBu=true;
+                 if($scope.businessName&&$scope.businessName.length>0){
+                     $scope.littleOne=false;
+                 }else{
+                     $scope.littleOne=true;
+                 }
+             };
+             $scope.testPerson=function () {
+                 $scope.alPe=true;
+                 if($scope.responsiblePerson&&$scope.responsiblePerson.length>0){
+                     $scope.littleTwo=false;
+                 }else{
+                     $scope.littleTwo=true;
+                 }
+             };
+             $scope.testTele=function () {
+                 $scope.alTel=true;
+                 if($scope.responsiblePersonTel&&$scope.responsiblePersonTel.length==11){
+                     $scope.littleThree=false;
+                 }else if($scope.responsiblePersonTel&&$scope.responsiblePersonTel.length<11){
+                     $scope.littleThree=true;
+                 }
+             }
+             $scope.testAddress=function () {
+                 $scope.alAd=true;
+                 if($scope.address&&$scope.address.length>0){
+                     $scope.littleFour=false;
+                 }else{
+                     $scope.littleFour=true;
+                 }
+             }
+//             $scope.getFile = function () {
+//                    fileReader.readAsDataUrl($scope.file, $scope)
+//                            .then(function(result) {
+//                                $scope.imageSrc = result;
+//                            });
+//                };
+
+             $scope.myShow=false;
+                $scope.business= function () {
+                    $scope.myShow = !$scope.myShow;
+                    /*图片预览修改开始*/
+                    var arr = [];
+                    var newArr = [];
+                    $scope.reader = new FileReader();   //创建一个FileReader接口
+                    $scope.img_upload = function (files) {       //单次提交图片的函数
+                        $scope.fil=files;
+                        mthod(files);
+                    };
+//                    $scope.certainUp=function () {
+//                        mthod($scope.fil);
+//                    };
+                    function mthod(files) {
+                        var postData = {};
+                        for (var i = 0; i < files.length; i++) {
+                            postData['img[' + i + ']'] = files[i];
+                        };
+                        ;
+//                    };
+
+//                $scope.close= function () {
+//                    var img=img[0];
+                        var promise = postMultipart('https://api.funcgo.com/v1/getimgurl', postData);
+                        promise.then(function successCallback(response) {
+//                            var str1='';
+//                            for(var i=0;i<response.data.data.length;i++){
+//                                str1+=response.data.data[i]+'&';
+//                            }
+//                            var arr1=str1.split('');
+//                            str1=arr1.join("&");
+                            var str1=response.data.data.join("&");
+                            if(str1.length>0){
+                                $scope.mage = "已上传营业执照";
+                            }else{
+                                $scope.mage = "上传营业执照";
+                            }
+                            $scope.ig=str1;
+//                            $scope.mage = "已上传营业执照";
+//                            $scope.ig = response.data.data;
+                            for (var i = 0; i < response.data.data.length; i++) {
+                                newArr.push(response.data.data[i]);
+                            }
+                            ;
+                            $scope.closeSet = function () {
+                                var obj={};
+                                newArr.splice(this.$index, 1);
+//                                    delete files[this.$index];
+                                for(var i=0;i<newArr.length;i++){
+                                    obj[i]=newArr[i];
+                                }
+                                files=obj;
+                                var str11=newArr.join("&");
+                                if(str11.length>0){
+                                    $scope.mage = "已上传营业执照";
+                                }else{
+                                    $scope.mage = "上传营业执照";
+                                }
+                                $scope.ig=str11;
+//                                var str='';
+//                                for(var i=0;i<newArr.length;i++){
+//                                    str+=newArr[i]+'&';
+//                                }
+
+                                $scope.fil=files;
+//                                mthod(files);
+                            };
+                            $scope.ima = newArr;
+
+                        }, function errorCallback(response) {
+
+                        })
+                        function postMultipart(url, data) {
+                            var fd = new FormData();
+                            angular.forEach(data, function (val, key) {
+                                fd.append(key, val);
+                            });
+                            var args = {
+                                method: 'POST',
+                                url: url,
+                                data: fd,
+                                headers: {'Content-Type': undefined},
+                                transformRequest: angular.identity
+                            };
+                            return $http(args);
+                        }
+
+//                        $scope.myShow = !$scope.myShow;
+//                };
+                    };
+                }
+                    /*图片预览修改结束*/
+             $scope.paracont = "获取验证码";
+             $scope.paraclass = "but_null";
+             $scope.getTestNum=function () {
+                 $scope.alTe=true;
+                 if ($scope.responsiblePersonTel && $scope.responsiblePersonTel.length == 11) {
+                     /*60s倒计时开始*/
+                     $scope.paraevent = true;
+                     var second = 60;
+                     var timePromise = undefined;
+                     timePromise = $interval(function () {
+                         if (second <= 0) {
+                             $scope.all=false;
+                             $interval.cancel(timePromise);
+                             timePromise = undefined;
+                             second = 60;
+                             $scope.paracont = "重发验证码";
+                             $scope.paraclass = "but_null";
+                             $scope.paraevent = true;
+                         } else {
+                             $scope.all=true;
+                             $scope.paracont = second + "秒后可重发";
+                             $scope.paraclass = "not but_null";
+                             second--;
+                         }
+                     }, 1000, 100);
+                     /*60s倒计时结束*/
+                     $http({
+                         method: 'post',
+                         url: 'https://api.funcgo.com/v1/enterprise/setverify',
+                         headers: {
+                             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                         },
+                         transformRequest: function (obj) {
+                             var str = [];
+                             for (var p in obj)
+                                 str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                             return str.join("&");
+                         },
+                         data: {company_phone: $scope.responsiblePersonTel},
+                     }).then(function successCallback(response) {
+                     }, function errorCallback(response) {
+                        if(response.status==422){
+                            $scope.littleThree=true;
+                            $scope.alTel = false;
+                            $scope.alreadyTel = "手机号码无效";
+                        }
+                     })
+                 } else if ($scope.responsiblePersonTel && $scope.responsiblePersonTel.length != 11) {
+                     $scope.alTel = false;
+                     $scope.alreadyTel = "请正确输入手机号";
+                 } else if (!$scope.responsiblePersonTel) {
+                     $scope.alTel = false;
+                     $scope.alreadyTel = "请输入手机号";
+                 };
+             };
+                $scope.signUp=function () {
+                    var data={img:$scope.ig};
+                    /*var data={
+                        company_name:$scope.businessName,
+                        company_address:$scope.address,
+                        company_manager:$scope.responsiblePerson,
+                        company_phone:$scope.responsiblePersonTel,
+                        verify_code:$scope.testNum,
+//                        'img[0]':$scope.myFile
+                        img:$scope.ig
+                    };*/
+                    if($scope.address!=undefined){
+                        data.company_address=$scope.address;
+                    };
+                    if($scope.businessName!=undefined){
+                        data.company_name=$scope.businessName;
+                    };
+                    if($scope.responsiblePerson!=undefined){
+                        data.company_manager=$scope.responsiblePerson;
+                    };
+                    if($scope.responsiblePersonTel!=undefined){
+                        data.company_phone=$scope.responsiblePersonTel;
+                    };
+                    if($scope.testNum!=undefined){
+                        data.verify_code=$scope.testNum;
+                    }
+                    $http({
+                        method:'post',
+                        url:'https://api.funcgo.com/v1/enterprise/reg',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                        },
+                        transformRequest: function(obj) {
+                            var str = [];
+                            for(var p in obj)
+                                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                            return str.join("&");
+                        },
+                        data:data,
+                    }).then(function  successCallback(response) {
+                        if(response.status==200){
+                            if(response.data.data) {
+                                appService.bName = $scope.businessName;
+                                appService.bCode = response.data.data.company_code;
+                                appService.dtoken = response.data.data.authorization.data.token;
+                                appService.tokenTime = response.data.data.authorization.data.expired_at;
+                                appService.freshTime = response.data.data.authorization.data.refresh_expired_at;
+                                locals.set("tken", appService.dtoken);//存字符串
+                                $location.path('/manageStaff');
+                            }
+                        }
+                    },function errorCallback(response) {
+                        if(response.status==403){
+                                $scope.extra=true;
+                                $scope.extraError=response.data.message;
+
+                        }
+                        if(response.status==422) {
+                            var errorArr = response.data.errors;
+                            if (errorArr.company_name) {
+                                $scope.littleOne = true;
+                                $scope.alBu = false;
+                                $scope.alreadyBusiness = errorArr.company_name[0];
+                            }
+                            if (errorArr.company_manager) {
+                                $scope.littleTwo = true;
+                                $scope.alPe = false;
+                                $scope.alreadyPeo = errorArr.company_manager[0];
+                            }
+                            if (errorArr.company_phone) {
+                                $scope.littleThree = true;
+                                $scope.alTel = false;
+                                $scope.alreadyTel = errorArr.company_phone[0];
+                            }
+                            if (errorArr.company_address) {
+                                $scope.littleFour = true;
+                                $scope.alAd = false;
+                                $scope.alreadyAdd = errorArr.company_address[0];
+                            }
+                            if (errorArr.verify_code) {
+                                $scope.alTe = false;
+                                $scope.alreadyTe = errorArr.verify_code[0];
+                            }
+                        }
+                       /* if(response.status==422){
+                            if(response.data.errors.length==2){
+                                $scope.littleOne=true;
+                                $scope.littleThree=true;
+                                $scope.alTel=false;
+                                $scope.alBu=false;
+                                $scope.alreadyBusiness=response.data.errors[0].code;
+                                $scope.alreadyTel=response.data.errors[1].code;
+                            }else if(response.data.errors.length==1){
+                                if(response.data.errors[0].field=="company_name"){
+                                    $scope.littleOne=true;
+                                    $scope.alBu=false;
+                                    $scope.alreadyBusiness=response.data.errors[0].code;
+                                }else {
+                                    $scope.littleThree=true;
+                                    $scope.alTel=false;
+                                    $scope.alreadyTel=response.data.errors[0].code;
+                                }
+                            }
+                        }*/
+                    })
+                }
+
+         })
+
+            /*本地存储服务开始*/
+            app.factory('locals', ['$window', function ($window) {
+                return {        //存储单个属性
+                    set: function (key, value) {
+                        $window.localStorage[key] = value;
+                    },        //读取单个属性
+                    get: function (key, defaultValue) {
+                        return $window.localStorage[key] || defaultValue;
+                    },        //存储对象，以JSON格式存储
+                    setObject: function (key, value) {
+                        $window.localStorage[key] = JSON.stringify(value);//将对象以字符串保存
+                    },        //读取对象
+                    getObject: function (key) {
+                        return JSON.parse($window.localStorage[key] || '{}');//获取字符串并解析成对象
+                    }
+
+                }
+            }]);
+            /*本地存储服务结束*/
+            app.factory('fileReader', ["$q", "$log", function($q, $log){
+                        var onLoad = function(reader, deferred, scope) {
+                            return function () {
+                                scope.$apply(function () {
+                                    deferred.resolve(reader.result);
+                                });
+                            };
+                        };
+
+                        var onError = function (reader, deferred, scope) {
+                            return function () {
+                                scope.$apply(function () {
+                                    deferred.reject(reader.result);
+                                });
+                            };
+                        };
+
+                        var getReader = function(deferred, scope) {
+                            var reader = new FileReader();
+                            reader.onload = onLoad(reader, deferred, scope);
+                            reader.onerror = onError(reader, deferred, scope);
+                            return reader;
+                        };
+
+                        var readAsDataURL = function (file, scope) {
+                            var deferred = $q.defer();
+                            var reader = getReader(deferred, scope);
+                            reader.readAsDataURL(file);
+                            return deferred.promise;
+                        };
+
+                        return {
+                            readAsDataUrl: readAsDataURL
+                        };
+                    }])
+             /*登陆页面控制器开始*/
+             app.controller('login',function ($scope,fileReader,$http,$location,appService,$interval,locals) {
+                 $scope.s1='img/web-logo.png';
+                 $scope.pageClass = 'loginn';
+                 $scope.tan=false;
+                 $scope.login=function () {
+                       $http({
+                            method:'post',
+                            url:'https://api.funcgo.com/v1/enterprise/login',
+                            data:{
+                                account_number:$scope.telephone,
+                                password:$scope.password
+                            }
+                        }).then(function  successCallback(response) {
+                           if(response.status==200){
+                               appService.bEnterName=response.data.data.company.company_name;
+                               appService.bEnterCode=response.data.data.company.company_code;
+                               appService.dEnterToken=response.data.data.token.token;
+                               appService.tokenTimeEnter=response.data.data.token.expired_at;
+                               appService.freshTimeEnter=response.data.data.token.refresh_expired_at;
+                               appService.isAllowe=response.data.data.company.is_allow;
+                               locals.set("tkenEnter",appService.dEnterToken);//存字符串
+                               if(response.data.data.company.is_allow==1){
+                                   if(response.data.data.company.company_name=="天津函数科技有限公司"){
+                                       appService.payName=response.data.data.company.company_name;
+                                       appService.payCode=response.data.data.company.company_code;
+                                       locals.set("payingBuName", appService.payName);//存公司名称
+                                       locals.set("payingBuCode", appService.payCode);//存公司代码
+                                       $location.path('/payingStaff');
+                                   }else {
+                                       $location.path('/manageStaffEnter');
+                                   }
+                               }else if(response.data.data.company.is_allow==0){
+                                   $location.path('/manageStaff');
+                               }
+                           }
+                        },function errorCallback(response) {
+                           $scope.tan=true;
+                            if (response.status==401){
+                                var arr12=[];
+                                var objj={};
+                                objj.code=response.data.message;
+                                arr12.push(objj);
+                                $scope.mess=arr12;
+                            }else if(response.status==422){
+                                $scope.mess=response.data.errors;
+                            }else if(response.status==403){
+                                $scope.mess=[{code:response.data.message}];
+                            }
+                        })
+                    };
+                 $scope.forgetPassword=function () {
+                     $location.path('/forgetPasswordOne');
+                 }
+
+             })
+             /*登陆页面控制器结束*/
+//            /*分页过滤器开始*/
+//            app.filter('paging',function(){      //paging 过滤器
+//                return function(lists,start){     //两个参数 lists 是在 html 里你ng-repeat的原始数据：
+//                    //  start 也就是 paging 后面传的参数，即 currentPage*listsPerPage
+//                    return lists.slice(start);     //将原始数据按照 start 分割
+//                };
+//            });
+            /*分页过滤器结束*/
+             /*员工管理页面控制器开始*/
+              app.controller('manageStaffEnter',function ($scope,$filter,fileReader,$http,$location,$window,appService,$interval,locals) {
+                  $scope.pageClass = 'manageStaffEnter';
+                  $scope.hiddenn=true;
+                  $scope.errorAddStaff=false;
+                  $scope.hiddee=true;
+                  $scope.hidd=true;
+                  $scope.dtokenEtner=appService.dEnterToken;//token
+                  $scope.timEnter=appService.tokenTimeEnter;//过期时间
+                  $scope.fTimeEnter=appService.freshTimeEnter;//刷新时间
+                  var timeee=new Date();//现在时间
+                  var tiEnter=new Date(Date.parse($scope.timEnter));//过期时间
+                  var tfreshEnter=new Date(Date.parse($scope.fTimeEnter));//刷新时间
+                  /*token处理开始*/
+                  if(timeee>$scope.fTimeEnter&&timeee>$scope.timEnter){
+                      $location.path('/login');
+                  }else if(timeee>tiEnter&&timeee<tfreshEnter){
+//                alert(1);
+                      /*刷新token开始*/
+                      $http({
+                          method:'put',
+                          url:'https://api.funcgo.com/v1/authorizations/current ',
+                          headers: {
+                              'Authorization': 'Bearer ' + appService.dEnterToken
+                          },
+                          transformRequest: function(obj) {
+                              var str = [];
+                              for(var p in obj)
+                                  str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                              return str.join("&");
+                          },
+                      }).then(function  successCallback(response) {
+                          var newEnterToken=response.data.data.token;
+                          locals.set("tkenEnter",newEnterToken);//存字符串
+                          getEnterToken= locals.get("tkenEnter");
+//                          $scope.ten=getToken;
+                          $scope.certain=function () {
+                              addStaffEnter(getEnterToken);
+                          };
+                          $scope.closeDelete=function () {
+                              $scope.hiddenn=false;
+                              var tl=this.value.account_number;
+                              $scope.closeDele=function () {
+                                  closeLet(getTokenEnter,tl);
+                              };
+                              $scope.cancelDele=function () {
+                                  $scope.hiddenn=true;
+                              }
+                          };
+                          methEnter(getEnterToken);
+                          staffEnter(getEnterToken);
+                          regTnterTo(getTokenEnter);
+                          $scope.addNewStaff=function () {
+                              $scope.hidd=false;
+                              $scope.errorAddStaff=false;
+                          }
+                          $scope.closeNewStaff=function () {
+                              $scope.hidd=true;
+                              $scope.errorAddStaff=false;
+                          };
+                          $scope.searchEnter=function () {
+                              if($scope.searchInfo!=undefined) {
+                                  searchTnterTo(getTokenEnter, $scope.searchInfo);
+                              }
+                          };
+                          $scope.deleteEnterToken=function () {
+                              deleteTnterTo(getEnterToken);
+                          }
+                          var count=0;
+                          $scope.change=function () {
+                              count++;
+                              var account=this.value.account_number;
+                              var indexS;
+                              for(var i=0;i<$scope.result.length;i++){
+                                  if($scope.result[i].account_number==account){
+                                      indexS=$scope.indexArr[i];
+                                  }
+                              };
+                              /*2018-3-26新增结束*/
+                              var index=this.$index;
+//                          var isAll=this.value.is_allow;
+                              var isAll=$scope.newArr[index];
+                              var isA;
+                              if(isAll=="1"){
+                                  isA=1;
+                              }else if(isAll=="0"){
+                                  isA=0;
+                              }
+                              changeStaffEnter(getTokenEnter,account,isA,index,indexS);
+//                          $window.location.reload();
+                          };
+                          $scope.conAdd=function () {
+                              $scope.hiddee=true;
+                              $scope.hidd=false;
+                              $scope.staffEnterName='';
+                              $scope.staffEnterAccount='';
+                          };
+                          $scope.closeStaff=function () {
+                              $scope.hiddee=true;
+                              $scope.hidd=true;
+                              $window.location.reload();
+                          };
+                      },function errorCallback(response) {
+
+                      })
+                      /*刷新token结束*/
+                  }else {
+                      //locals.set("tken", $scope.dtoken);//存字符串
+                      var getTokenEnter= locals.get("tkenEnter");
+                      $scope.certain=function () {
+                          addStaffEnter(getTokenEnter);
+                      };
+                      $scope.closeDelete=function () {
+                          $scope.hiddenn=false;
+                          var tl=this.value.account_number;
+                          $scope.closeDele=function () {
+                              closeLet(getTokenEnter,tl);
+                          };
+                          $scope.cancelDele=function () {
+                              $scope.hiddenn=true;
+                          }
+                      };
+                      methEnter(getTokenEnter);
+                      staffEnter(getTokenEnter);
+                      regTnterTo(getTokenEnter);
+                      buyTnterTo(getTokenEnter);
+                      $scope.addNewStaff=function () {
+                          $scope.hidd=false;
+                          $scope.errorAddStaff=false;
+                      }
+                      $scope.closeNewStaff=function () {
+                          $scope.hidd=true;
+                          $scope.errorAddStaff=false;
+                      };
+                      $scope.deleteEnterToken=function () {
+                          deleteTnterTo(getTokenEnter);
+                      }
+                      $scope.searchEnter=function () {
+                          if($scope.searchInfo!=undefined){
+                              searchTnterTo(getTokenEnter,$scope.searchInfo);
+                          }
+                      }
+                      var count=0;
+                      $scope.change=function () {
+                          count++;
+                          var account=this.value.account_number;
+                          /*2018-3-26新增开始*/
+                          var indexS;
+                         for(var i=0;i<$scope.result.length;i++){
+                                if($scope.result[i].account_number==account){
+                                    indexS=$scope.indexArr[i];
+                                }
+                          };
+                          /*2018-3-26新增结束*/
+                          var index=this.$index;
+//                          var isAll=this.value.is_allow;
+                          var isAll=$scope.newArr[index];
+                          var isA;
+                          if(isAll=="1"){
+                              isA=1;
+                          }else if(isAll=="0"){
+                              isA=0;
+                          }
+                          changeStaffEnter(getTokenEnter,account,isA,index,indexS);
+//                          $window.location.reload();
+                      };
+                      $scope.conAdd=function () {
+                          $scope.hiddee=true;
+                          $scope.hidd=false;
+                          $scope.staffEnterName='';
+                          $scope.staffEnterAccount='';
+                      }
+                      $scope.closeStaff=function () {
+                          $scope.hiddee=true;
+                          $scope.hidd=true;
+                          $window.location.reload();
+                      }
+                  }
+                  /*token处理结束*/
+                  function closeLet(token,tele) {
+                      $http({
+                          method:'post',
+                          url:'https://api.funcgo.com/v1/enterprise/delete',
+                          headers: {
+                              'Authorization': 'Bearer ' + token,
+                          },
+//                          transformRequest: function(obj) {
+//                              var str = [];
+//                              for(var p in obj)
+//                                  str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+//                              return str.join("&");
+//                          },
+                          data:{
+                              account_number:tele,
+                          }
+                      }).then(function  successCallback(response) {
+                          if(response.status==200){
+//                              $scope.hiddenn=true;
+                              $window.location.reload();
+                          }
+                      },function errorCallback(response) {
+                      })
+                  };
+
+                  function methEnter(token) {
+                        $http({
+                            method:'get',
+                            url:'https://api.funcgo.com/v1/enterprise',
+                            headers: {
+                                'Authorization': 'Bearer ' + token,
+                            },
+                            transformRequest: function(obj) {
+                                var str = [];
+                                for(var p in obj)
+                                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                                return str.join("&");
+                            },
+                        }).then(function  successCallback(response) {
+                            if(response.status==200){
+                                $scope.businessEnterName=response.data.data.company_name;
+                                $scope.businessEnterCode=response.data.data.company_code;;
+                            }
+                        },function errorCallback(response) {
+                        })
+                    };
+                  function staffEnter(token) {
+                        $http({
+                            method:'get',
+                            url:'https://api.funcgo.com/v1/enterprise/showusers',
+                            headers: {
+                                'Authorization': 'Bearer ' + token,
+                            },
+                            transformRequest: function(obj) {
+                                var str = [];
+                                for(var p in obj)
+                                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                                return str.join("&");
+                            },
+                        }).then(function  successCallback(response) {
+                            if($scope.result){
+                                response.data.data= $scope.result;
+                            }else{
+                                $scope.result=response.data.data;
+                            }
+                            var arr=[];
+                            var newArrr=[];
+                            if(response.status==200) {
+                                for(var i=0;i<response.data.data.length;i++) {
+                                    if (response.data.data[i].headimgurl == null) {
+                                        response.data.data[i].headimgurl= 'http://article-img.b0.upaiyun.com/outline/SXgbp2FwIE.jpeg';
+                                    };
+                                    arr.push(response.data.data[i].is_allow);
+                                    newArrr.push(i);
+                                   if(response.data.data[i].is_allow=="1"){
+////                                        $scope.color=true;
+                                        response.data.data[i].is_allow=true;
+////                                        $scope.statuss=true;
+                                    }else{
+////                                        $scope.color=false;
+                                        response.data.data[i].is_allow=false;
+////                                        $scope.statuss=false;
+                                    }
+                                };
+                                $scope.indexArr=newArrr;
+                                $scope.newArr=arr;
+                                /*分页开始*/
+                                var perNumPage=12;
+                                var pNumPage=Math.ceil(response.data.data.length/perNumPage);
+                                var widthdth=(pNumPage*29)+"px";
+                                $scope.totalPageNum=pNumPage;
+                                if(pNumPage==0){
+                                    $scope.pageShowN=false;
+                                }else {
+                                    $scope.pageShowN=true;
+                                    if(pNumPage>8){
+                                        angular.element($('#accountSet')).css("width","234px");
+                                        angular.element($('.st')).css("width","234px");
+                                        angular.element($('.tstt')).css("position","absolute");
+                                        angular.element($('.tstt')).css("width","900%");
+                                        angular.element($('.tstt')).css("left","1px");
+                                        angular.element($('.tstt')).css("top","0px");
+                                    }else{
+                                        angular.element($('#accountSet')).css("width",widthdth);
+                                        angular.element($('.st')).css("width",widthdth);
+                                        angular.element($('.tstt')).css("position","static");
+                                        angular.element($('.tstt')).css("width",widthdth);
+                                        angular.element($('.tstt')).css("left","1px");
+                                        angular.element($('.tstt')).css("top","1px");
+                                    }
+                                    $scope.pageShowN= true;
+                                    $scope.curr=false;
+                                    $scope.currentPageNum = 0;                       //设置当前页是 0
+                                    var RightWi=0;
+                                    $scope.setPageNum = function (num) {             // 当点击页码数字时执行的函数
+//                                        window.location.reload();
+                                       /* for(var i=0;i<$scope.newArr.length;i++){
+                                            if($scope.newArr[i]=="0"){
+                                                response.data.data[i].is_allow=false;
+                                            }else if($scope.newArr[i]=="1"){
+                                                response.data.data[i].is_allow=true;
+                                            }
+                                        }*/
+                                        var currentRightPre=angular.element($(".tstt")).css("left");
+                                        var currentRightPreLength=currentRightPre.length;
+                                        var currentRightNPre=Number(currentRightPre.slice(1,currentRightPreLength-2));
+                                        $scope.nowRightPre=currentRightNPre;
+                                        $scope.currentPageNum = num;                 //将当前页 设置为 页码数
+                                        if ($scope.currentPageNum == pNumPage - 1) {
+                                            $scope.staff = response.data.data.slice(12 * $scope.currentPageNum);
+                                        } else if ($scope.currentPageNum < pNumPage - 1) {
+                                            $scope.staff = response.data.data.slice(12 * $scope.currentPageNum, 12 * ($scope.currentPageNum + 1));
+                                        };
+//                            $scope.acNum=$scope.currentPage;
+                                    };
+                                    $scope.certainJumpPage=function () {
+                                        $scope.currentPageNum=$scope.pageNum-1;
+                                        if((pNumPage-7)>$scope.pageNum||(pNumPage-7)==$scope.pageNum){
+                                            var disPage = "-" + ($scope.currentPageNum*29) + "px";
+                                            angular.element($(".tstt")).css("left", disPage)
+                                        }else{
+                                            var distPage = "-" + ((pNumPage-8)*29) + "px";
+                                            angular.element($(".tstt")).css("left", distPage)
+                                        };
+                                        if ($scope.currentPageNum == pNumPage - 1) {
+                                            $scope.staff = response.data.data.slice(12 * $scope.currentPageNum);
+                                        } else if ($scope.currentPageNum < pNumPage - 1) {
+                                            $scope.staff = response.data.data.slice(12 * $scope.currentPageNum, 12 * ($scope.currentPageNum + 1));
+                                        };
+                                        $scope.pageNum="";
+                                    };
+                                    $scope.prevPageNum = function () {               //点击上一页执行的函数
+                                        var currentRightPre=angular.element($(".tstt")).css("left");
+                                        var currentRightPreLength=currentRightPre.length;
+                                        var currentRightNPre=Number(currentRightPre.slice(1,currentRightPreLength-2));
+                                        $scope.nowRightPre=currentRightNPre;
+                                        if($scope.nowRightPre>0) {
+                                            $scope.nowRightPre=$scope.nowRightPre-29;
+                                            var nowRightPre = $scope.nowRightPre;
+                                            if(nowRightPre==0){
+                                                clickNum=0;
+                                                RightWi=0;
+                                            }
+                                            var distanceL = "-" + nowRightPre+ "px";
+                                            angular.element($(".tstt")).css("left", distanceL)
+                                        }
+
+                                        if ($scope.currentPageNum  > 0) {
+                                            $scope.currentPageNum --;
+                                        };
+                                        $scope.staff= response.data.data.slice(12 * $scope.currentPageNum , 12 * ($scope.currentPageNum  + 1));
+                                    };
+                                    $scope.nextPageNum = function () {              //点击下一页执行的函数
+                                        var currentRightPre=angular.element($(".tstt")).css("left");
+                                        var currentRightPreLength=currentRightPre.length;
+                                        var currentRightNPre=Number(currentRightPre.slice(1,currentRightPreLength-2));
+                                        $scope.nowRightPre=currentRightNPre;
+                                        RightWi=$scope.nowRightPre;
+                                        RightWi=RightWi+29;
+                                        var testValueRight=(pNumPage-8)*29;
+                                        if(RightWi>testValueRight||RightWi==testValueRight){
+                                            RightWi=testValueRight;
+                                        };
+                                        $scope.RightWi=RightWi;
+                                        var distanceRight="-"+RightWi+"px";
+                                        angular.element($(".tstt")).css("left",distanceRight);
+//                                $scope.currentPage=clickNum;
+                                        if ($scope.currentPageNum < pNumPage - 1) {
+                                            $scope.currentPageNum++;
+                                        } else {
+                                            $scope.currentPageNum = pNumPage - 1;
+                                        };
+                                        $scope.acNum=$scope.currentPageNum ;
+                                        if ($scope.currentPageNum  == pNumPage - 1) {
+                                            $scope.staff= response.data.data.slice(12 * $scope.currentPageNum );
+                                        } else if ($scope.currentPageNum  <pNumPage- 1) {
+                                            $scope.staff = response.data.data.slice(12 * $scope.currentPageNum , 12 * ( $scope.currentPageNum  + 1));
+                                        }
+                                    };
+                                    var arr1 = [];
+                                    for (var i = 0; i < pNumPage; i++) {
+                                        arr1.push(i);
+                                    };
+                                    $scope.amountt = arr1;
+                                    $scope.staff= response.data.data.slice(12 * $scope.currentPageNum, 12 * ( $scope.currentPageNum + 1));
+                                }
+                                /*分页结束*/
+                            }
+                        },function errorCallback(response) {
+                        });
+                    };
+                  function addStaffEnter(token) {
+                      $http({
+                          method:'post',
+                          url:'https://api.funcgo.com/v1/enterprise/adduser',
+                          headers: {
+                              'Authorization': 'Bearer ' + token,
+                          },
+//                          transformRequest: function(obj) {
+//                              var str = [];
+//                              for(var p in obj)
+//                                  str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+//                              return str.join("&");
+//                          },
+                          data:{
+                              user_name:$scope.staffEnterName,
+                              user_phone:$scope.staffEnterAccount
+                          }
+                      }).then(function  successCallback(response) {
+                          if(response.status==201){
+                              $scope.errorAddStaff=false;
+//                              $window.location.reload();
+                              $scope.hiddee=false;
+                              $scope.hidd=true;
+                          }
+                      },function errorCallback(response) {
+                          if(response.status==422){
+                              $scope.errorAddStaff=true;
+                              $scope.addStaffError=response.data.errors;
+                          }else if(response.status==403){
+                              var arr=[{code:response.data.message}];
+                              $scope.errorAddStaff=true;
+                              $scope.addStaffError=arr;
+                          }
+                      })
+                  };
+                  function changeStaffEnter(token,number,isAllow,index,indexS) {
+                      $http({
+                          method:'post',
+                          url:'https://api.funcgo.com/v1/enterprise/switch',
+                          headers: {
+                              'Authorization': 'Bearer ' + token,
+                          },
+//                          transformRequest: function(obj) {
+//                              var str = [];
+//                              for(var p in obj)
+//                                  str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+//                              return str.join("&");
+//                          },
+                          data:{
+                              account_number:number,
+                              is_allow:isAllow
+                          }
+                      }).then(function  successCallback(response) {
+                         if(response.status==200){
+                             if(response.data.data.is_allow=="0"){
+//                                 $scope.statuss=true;
+                                 $scope.newArr[index]=response.data.data.is_allow;
+                                 $scope.staff[index].is_allow=false;
+                                 $scope.result[indexS].is_allow=false;
+                                 angular.element(document.querySelectorAll('#yes'))[index].className='no';
+                                 angular.element(document.querySelectorAll('#no'))[index].className='yes';
+                             }else if(response.data.data.is_allow=="1"){
+//                                 $scope.statuss=false;
+                                 $scope.newArr[index]=response.data.data.is_allow;
+                                 ($scope.staff[index]).is_allow=true;
+                                 $scope.result[indexS].is_allow=true;;
+                                 angular.element(document.querySelectorAll('#yes'))[index].className='yes1';
+                                 angular.element(document.querySelectorAll('#no'))[index].className='no';
+                             }
+//                             $window.location.reload();
+                         }
+                      },function errorCallback(response) {
+                      })
+                  };
+                  /*删除token开始*/
+                  function deleteTnterTo(tok) {
+                      if(tok){
+                          $http({
+                              method:'delete',
+                              url:'https://api.funcgo.com/v1/authorizations/current',
+                              headers: {
+                                  'Authorization': 'Bearer ' + tok,
+                              },
+                              transformRequest: function(obj) {
+                                  var str = [];
+                                  for(var p in obj)
+                                      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                                  return str.join("&");
+                              },
+                          }).then(function  successCallback(response) {
+                              //                     alert(1);
+                              if(response.status==204){
+                                  $location.path('/login');
+                              }
+                          },function errorCallback(response) {
+                          })
+                      }else {
+                          $location.path('/login');
+                      }
+                  }
+                  /*删除token结束*/
+                  /*搜索开始*/
+                  function searchTnterTo(tok,info) {
+                      if(tok&&info&&(info!=undefined)) {
+                          $http({
+                              method: 'get',
+                              url:  encodeURI('https://api.funcgo.com/v1/enterprise/search?words=' + info),
+                              headers: {
+                                  'Authorization': 'Bearer ' + tok,
+                              },
+                              transformRequest: function (obj) {
+                                  var str = [];
+                                  for (var p in obj)
+                                      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                                  return str.join("&");
+                              },
+                          }).then(function successCallback(response) {
+                              //                     alert(1);
+                              for (var i = 0; i < response.data.data.length; i++) {
+                                  if (response.data.data[i].headimgurl == null) {
+                                      response.data.data[i].headimgurl = "http://article-img.b0.upaiyun.com/outline/SXgbp2FwIE.jpeg";
+                                  }
+                                  ;
+                                  if (response.data.data[i].is_allow == "0") {
+                                      response.data.data[i].is_allow = false;
+                                  } else if (response.data.data[i].is_allow == "1") {
+                                      response.data.data[i].is_allow = true;
+                                  }
+                                  ;
+                              }
+                              $scope.staff = response.data.data;
+                          }, function errorCallback(response) {
+                          })
+                      }
+                  }
+                  /*搜索结束*/
+                  /*今日注册开始*/
+                  function regTnterTo(tok) {
+                      $http({
+                          method:'get',
+                          url:'https://api.funcgo.com/v1/enterprise/todayReg',
+                          headers: {
+                              'Authorization': 'Bearer ' + tok,
+                          },
+                          transformRequest: function(obj) {
+                              var str = [];
+                              for(var p in obj)
+                                  str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                              return str.join("&");
+                          },
+                      }).then(function  successCallback(response) {
+                          //                     alert(1);
+                            $scope.toReg=response.data.data;
+                      },function errorCallback(response) {
+                      })
+                  }
+                  /*今日注册结束*/
+                  /*今日购买开始*/
+                  function buyTnterTo(tok) {
+                      $http({
+                          method:'get',
+                          url:'https://api.funcgo.com/v1/enterprise/todayBuy',
+                          headers: {
+                              'Authorization': 'Bearer ' + tok,
+                          },
+                          transformRequest: function(obj) {
+                              var str = [];
+                              for(var p in obj)
+                                  str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                              return str.join("&");
+                          },
+                      }).then(function  successCallback(response) {
+                          //                     alert(1);
+                          $scope.toBuy=response.data.data;
+                      },function errorCallback(response) {
+                      })
+                  }
+                  /*今日购买结束*/
+              })
+             /*员工管理页面控制器结束*/
+
+            /*员工流量图开始*/
+            //echarts基本参数
+            app.factory('$echartsConfig', function () {
+                        var base = new Date().getTime();
+                        var data = [];
+                        var date = [];
+                        var oneHour=3600 * 1000;
+                        var lastDay=base-24*3600 * 1000;
+                        for(var i=0;i<24;i++){
+                            lastDay += oneHour;
+                            var now=new Date(lastDay);
+                            date.push(now.getFullYear()+'/'+(now.getMonth()+1)+'/'+now.getDate()+" "+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds());
+                            data.push(Math.round(Math.random() * 20));
+                        };
+                        return {
+                            tooltip : {
+                                trigger: 'axis',
+                            },
+                            legend: {
+                                data:[]
+                            },
+                            xAxis: {
+                                type: 'category',
+                                show:false,
+                                boundaryGap: false,
+//                                data: ['aa', 'bb', 'cc', 'dd', 'ff', 'hh', 'ii','gg','kk','ll'],
+                                data:date,
+                                axisLabel:{
+                                    //X轴刻度配置
+                                    interval:0 ,//0：表示全部显示不间隔；auto:表示自动根据刻度个数和宽度自动设置间隔个数,
+                                }
+                            },
+                            yAxis: {
+                                type: 'value',
+                                show:false,
+                            },
+                            series: [{
+//                                data: [20,10,30,10,40,30,20,40,10,20],
+                                type:'line',
+                                smooth:true,
+//                                symbol: 'none',
+                                sampling: 'average',
+                                itemStyle: {
+                                    normal: {
+                                        color: 'rgb(255, 70, 131)'
+                                    }
+                                },
+                                data:data,
+                                areaStyle: {
+                                    normal:{
+                                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                            offset: 0,
+                                            color: 'rgba(102,135,254,1)'
+                                        }, {
+                                            offset: 1,
+                                            color: 'rgba(102,135,254,1)'
+                                        }])
+                                    }
+                                }
+                            }]
+                        };
+                    })
+                    //echarts directive
+                    .directive('echarts', ['$echartsConfig','$window', function ($echartsConfig,$window) {
+                        return {
+                            restrict: 'A',
+                            link: function (scope, element, attrs) {
+                                if (!scope.$echartsInstance)
+                                    scope.$echartsInstance = {};
+                                scope.$watch(attrs.echarts, function () {
+                                    var option=angular.extend({},$echartsConfig,scope.$eval(attrs.echarts));
+                                    if (option.id) {
+                                        scope.$echartsInstance[option.id] = echarts.init(element[0]);
+                                        scope.$echartsInstance[option.id].setOption(option);
+                                    } else {
+                                        scope.$echartsInstance = echarts.init(element[0]);
+                                        scope.$echartsInstance.setOption(option);
+                                    }
+                                });
+                                $window.onresize = function() {
+                                    if(scope.$echartsInstance.searchTimeOption)
+                                        scope.$echartsInstance.searchTimeOption.resize();
+                                    if(scope.$echartsInstance.searchCostOption)
+                                        scope.$echartsInstance.searchCostOption.resize();
+                                    if(scope.$echartsInstance.searchNumOption)
+                                        scope.$echartsInstance.searchNumOption.resize();
+                                };
+                            }
+                        };
+                    }])
+
+</script>
+</html>

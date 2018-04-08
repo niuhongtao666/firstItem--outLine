@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/register.css?v=22">
+    <script src="angular/angular.min.js"></script>
+</head>
+<body>
+    <div class="smalllogo"><img src="img/web-logo.png" alt="小图标"></div>
+    <div class="mainCon">
+        <div class="registration">Registration</div>
+        <div class="companyName">
+            <input type="text" placeholder="公司名称" ng-model="businessName" ng-keyup="testBusinessName()">
+            <div id="littleOne" ng-class="{hide:littleOne,show:!littleOne}"><img src="img/littlePic.png" alt=""></div>
+            <div class="alreadyBusiness" ng-class="{hide:alBu,show:!alBu}">{{alreadyBusiness}}</div>
+        </div>
+        <div class="responsiblePerson">
+            <input type="text" placeholder="负责人" ng-model="responsiblePerson"  ng-keyup="testPerson()">
+            <div id="littleTwo" ng-class="{hide:littleTwo,show:!littleTwo}"><img src="img/littlePic.png" alt=""></div>
+            <div class="alreadyPerson" ng-class="{hide:alPe,show:!alPe}">{{alreadyPeo}}</div>
+        </div>
+        <div class="responsiblePersonTel">
+            <input type="text" placeholder="负责人联系方式（手机号）" ng-model="responsiblePersonTel" ng-keyup="testTele()">
+            <div id="littleThree" ng-class="{hide:littleThree,show:!littleThree}"><img src="img/littlePic.png" alt=""></div>
+            <div class="alreadyTel" ng-class="{hide:alTel,show:!alTel}">{{alreadyTel}}</div>
+        </div>
+        <div class="address">
+            <input type="text" placeholder="办公地址" ng-model="address" ng-keyup="testAddress()">
+            <div id="littleFour" ng-class="{hide:littleFour,show:!littleFour}"><img src="img/littlePic.png" alt=""></div>
+            <div class="alreadyAddress" ng-class="{hide:alAd,show:!alAd}">{{alreadyAdd}}</div>
+        </div>
+        <div class="total">
+            <div class="testNum"><input type="text" placeholder="请输入验证码" ng-model="testNum" ng-keyup="testN()"></div>
+            <button class="getTestNum" ng-click="getTestNum()" ng-class="paraclass" ng-bind="paracont" ng-disabled="all"></button>
+            <div class="alreadyTestNum" ng-class="{hide:alTe,show:!alTe}">{{alreadyTe}}</div>
+        </div>
+        <div class="license" ng-click="business()"><span>{{mage}}</span><img src="img/photo.png" id="photo" width="17px" height="14px" alt=""></div>
+        <!--<input type="button" placeholder="营业执照（可选）">-->
+        <div class="login">
+            <div class="extra" ng-show="extra">{{extraError}}}</div>
+            <div class="login1" ng-click="signUp()">注册</div>
+        </div>
+
+    </div>
+    <div class="cover" ng-show="myShow">
+        <div class="content">
+            <div class="chooseLicense">请上传营业执照</div>
+            <!--<div class="certainUp" ng-click="certainUp()">上传</div>-->
+            <div class="close" ng-click="close()" style="font-size: 14px;">关闭</div>
+            <div id="main">
+                <div class="zone" ng-repeat="item in ima">
+                     <img ng-src="{{item}}" style="width:100%;height:100%;display:block;" onchange="angular.element(this).scope().img_upload(this.files)"/>
+                <!--<img src="img/example.jpg" style="width:100px;height:100px;margin:0 auto;display:block;" />-->
+                    <div class="closeSet" ng-click="closeSet()">X</div>
+                </div>
+                <div class="addd">
+                    <img src="img/add.jpg" id="addd" alt="">
+                    <input type="file" file-model="myFile" id="file" multiple="multiple" onchange="angular.element(this).scope().img_upload(this.files)"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

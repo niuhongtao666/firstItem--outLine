@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员工</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/manageStaff.css?v=22">
+    <script src="angular/angular.min.js"></script>
+</head>
+<body>
+    <!--左侧部分开始-->
+    <div class="left">
+        <!--<div class="smallLogo"><img src="img/web-logo.png" alt=""></div>-->
+        <!--<div class="name">公司名称：{{businessNam}}</div>-->
+        <!--<div class="code">公司代码：{{businessCode}}</div>-->
+        <!--<div class="addStaff">添加员工</div>-->
+        <!--<div class="out" ng-click="deleteToken()">登出</div>-->
+        <div class="smallLogo"><img src="img/web-logo.png" alt=""></div>
+        <div class="lineFirst"></div>
+        <div class="smallLogoSec"><img src="img/businessName.png" alt=""></div>
+        <div class="name"><p class="pOne">公司名称</p>{{businessNam}}</div>
+        <div class="smallLogoThr"><img src="img/businessCode.png" alt=""></div>
+        <div class="code"><p class="pTwo">公司代码</p>{{businessCode}}</div>
+        <div class="addStaff">
+            <div class="xDirection"></div>
+            <div class="yDirection"></div>
+            添加员工
+        </div>
+        <div class="out" ng-click="deleteToken()">登出</div>
+    </div>
+    <!--左侧部分结束-->
+    <!--右侧部分开始-->
+    <div class="right">
+        <div class="head">
+            <div class="search">
+                <div class="lf">
+                    <img src="img/sear.png" alt="">
+                    <span>搜索</span>
+                </div>
+                <div class="rt">
+                    <input type="text" placeholder="输入员工姓名\编号">
+                </div>
+            </div>
+            <span class="status"></span>
+            <span class="identity">管理员</span>
+            <span class="headPic">
+                <img src="img/headPic.jpg" alt="">
+            </span>
+        </div>
+        <div class="main">
+            <div class="content">
+                <div class="registerPic"><img src="img/registerPic.png" alt=""></div>
+                <div class="checkPic"><img src="img/check.png" alt=""></div>
+                <!--3-29修改开始-->
+                <div class="completedPic"><img src="img/completedPic.png" alt=""></div>
+                <!--3-29修改结束-->
+                <div class="register">注册</div>
+                <div class="line1"></div>
+                <div class="check">审核</div>
+                <div ng-class="{line2:color,btm:!color}"></div>
+                <div ng-class="{completed:color,fontCol:!color}">完成</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
